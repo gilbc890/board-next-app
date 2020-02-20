@@ -1,0 +1,22 @@
+{
+  "name": "board-next-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --ext .js,.jsx --format table ."
+  },
+  "dependencies": {
+    "next": "9.2.2",
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react-hooks": "^2.4.0"
+  }
+}
