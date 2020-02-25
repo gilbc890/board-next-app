@@ -10,7 +10,6 @@ const Main = () => (
         <main className="main-container">
             <WeeklyAside/>
             <HumorBoard/>
-            <Upload/>
         </main>
         <style jsx>{`
             .main-container{
