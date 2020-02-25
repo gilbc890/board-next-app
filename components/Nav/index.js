@@ -16,33 +16,33 @@ const Nav = () => (
     </nav>
     <style jsx>{`
       .nav{
-        background:#fff;
+        background: #fff;
       }
       .nav-container{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width:90%;
-        margin:auto;
-        padding:1%;
+        width: 90%;
+        margin: auto;
+        padding: 1%;
       }
       .bar-menu{
-        border:none;
-        color:#5680e9;
+        border: none;
+        color: #5680e9;
       }
       .logo{
-        width:50%;
-        text-align:center;
+        width: 50%;
+        text-align: center;
       }
       .logo-img{
-        width:10%;
+        width: 10%;
       }
       .log-btn{
-        width:5%;
-        height:4vh;
-        background-color:#5680e9;
-        color:#fff;
-        border-radius:20px;
+        width: 5%;
+        height: 4vh;
+        background-color: #5680e9;
+        color: #fff;
+        border-radius: 20px;
       }
     `}</style>
   </div>

@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Nav from '../components/Nav'
+import Main from '../components/Main'
 
 const Home = () => (
   <div className="container">
@@ -22,9 +23,7 @@ const Home = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <Nav/>
-    <main className="main-container">
-    </main>
-
+    <Main/>
     <footer>
     </footer>
 
@@ -34,8 +33,8 @@ const Home = () => (
     <style jsx global>{`
       body{
         background: #121212;
-        padding:0;
-        margin:0;
+        padding: 0;
+        margin: 0;
       }
     `}</style>
   </div>
