@@ -1,32 +1,73 @@
 import React, { useState } from 'react';
 
 
-function HumorBoard() {
+function HumorBoard(props) {
     const [showResults, setShowResults] = useState(false);
+    const [boardId, setBoardId] = useState(0);
+
+    const idSetting = (id) => {
+        setShowResults(!showResults);
+        setBoardId(id);
+    }
+    const showCheck = (clickId) => {
+        const result = showResults && clickId === boardId 
+        return result
+   }
+
+    const data = props.board.data[0];
+    const board = Object.keys(data).map((item) => data[item])
 
     return(
         <div className="humor">
         <aside>
-            <div 
-                className="board-title"
-                onClick={() => setShowResults(!showResults)}
-            >
-                <h2>Board title</h2>
-                <span>icon</span>
-            </div>
-            { showResults ? 
-                <div className="board-context">
-                    <div className="context-img">
-                        <img src= "https://unsplash.it/300/300" />
+            {board.map((item) => {
+                return(
+                    <>
+                    <div 
+                        key={item.id}
+                        className="board-title"
+                        onClick={() => idSetting(item.id)}
+                    >
+                        <h2>{item.title}</h2>
+                        <span>icon</span>
                     </div>
-                    <div className="context-text">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique voluptate sed reiciendis rerum blanditiis, earum voluptatem culpa laborum quasi facilis animi rem vero nemo asperiores quibusdam placeat aliquid voluptas. Modi!
-                        <br/>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet neque fuga obcaecati voluptate atque cumque nisi, earum provident odit ratione, officia repudiandae consectetur tenetur, distinctio quas vitae qui optio cupiditate.
+                    {showCheck(item.id) ? 
+                    <div className="board-context">
+                        <div className="context-img">
+                            {item.img}
+                        </div>
+                        <div className="context-text">
+                            {item.body}
+                        </div>
                     </div>
-                </div>
-                :
-                <div className="blank"/>
+                    :
+                    <div className="blank"/>
+                    }
+
+                    </>
+                )
+                })
             }
+            {/* {showResults
+                ? 
+                board.map((item) => {
+                    return(
+                        <div 
+                            className="board-context"
+                            key={item.id}    
+                        >
+                            <div className="context-img">
+                                {item.img}
+                            </div>
+                            <div className="context-text">
+                                {item.body}
+                            </div>
+                        </div>
+                    )
+                })
+            :
+            <div className="blank"/>
+            } */}
         </aside>
         <style jsx>{`
             .humor{

@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import Nav from '../components/Nav'
 import Main from '../components/Main'
+import { loadDB } from '../firebase/db'
 
-const Home = () => (
+const Home = (props) => (
   <div className="container">
     <Head>
       <title>Create Next App</title>
@@ -23,10 +24,9 @@ const Home = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <Nav/>
-    <Main/>
+    <Main data={props} />
     <footer>
     </footer>
-
     <style jsx>{`
     `}</style>
 
@@ -39,5 +39,10 @@ const Home = () => (
     `}</style>
   </div>
 )
+
+Home.getInitialProps = async () => {
+  const data = await loadDB();
+  return data
+}
 
 export default Home
