@@ -3,13 +3,14 @@ import WeeklyAside from '../WeeklyAside'
 import HumorBoard from '../HumorBoard'
 import Upload from '../Upload'
 
-const Main = () => (
+const Main = (props) => {
+    return(
     <div className="main">
         <Head>
         </Head>
         <main className="main-container">
             <WeeklyAside/>
-            <HumorBoard/>
+            <HumorBoard board={props} />
             <Upload/>
         </main>
         <style jsx>{`
@@ -21,6 +22,7 @@ const Main = () => (
             }
         `}</style>
     </div>
-)
+    )
+}
 
 export default Main;
