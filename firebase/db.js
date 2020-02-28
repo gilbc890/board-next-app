@@ -1,12 +1,7 @@
 import { db } from './firebase';
 
-export const loadDB = () => {
-  const titleRef = db.ref('board-upload/');
-  const data = [];
-  titleRef.on('value', (snapshot) => {
-    if (snapshot.exists()) {
-      data.push(snapshot.val())
-    } 
-  });
-  return data;
+export const loadDB = async () => {
+  const titleRef = await db.ref('board-upload/');
+  const data = await titleRef.once('value').then((snapshot) => snapshot.val());
+  return data
 };

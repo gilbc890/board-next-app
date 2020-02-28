@@ -1,10 +1,9 @@
+import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 
 const Upload = () => (
     <div className="upload">
         <button className="upload-btn">
-            <span className="plus">
-                &#43;
-            </span>
+            <AddCircleRoundedIcon/>
         </button>
         <style jsx>{`
             .upload-btn{

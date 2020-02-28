@@ -1,11 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import MenuIcon from '@material-ui/icons/Menu';
 
 const Nav = () => (
   <div className="nav">
     <nav className="nav-container">
-      <button className="bar-menu fa-2x">
-        <FontAwesomeIcon icon={faBars} />
+      <button className="bar-menu">
+        <MenuIcon/>
       </button>
       <a href="/" className="logo">
            <img src="/logo.png" className="logo-img" alt="logo" />
