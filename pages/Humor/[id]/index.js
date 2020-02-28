@@ -1,11 +1,19 @@
 import Head from 'next/head'
+import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
-import Main from '../../../components/Main'
+import WeeklyAside from '../../../components/WeeklyAside'
+import HumorBoard from '../../../components/HumorBoard'
+import Upload from '../../../components/Upload'
+
 import { loadDB } from '../../../firebase/db'
+import { CircularProgress } from '@material-ui/core';
 
 const Humor = (props) => {
   const id = parseInt(props.query.id);
-  const data = props.data[0];
+  const data = props.data;
+  if ( !data ) {
+    return <CircularProgress />
+  }
   const board = Object.keys(data).map((item) => data[item])
   const selectedItem = board.find( item => item.id === id)
 
@@ -29,10 +37,20 @@ const Humor = (props) => {
       <meta name="twitter:creator" content="@USERNAME" />
     </Head>
     <Nav/>
-    <Main data={props} />
+    <main className="main-container">
+      <WeeklyAside/>
+      <HumorBoard board={props} />
+      <Upload/>
+    </main>
     <footer>
     </footer>
     <style jsx>{`
+      .main-container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5%;
+      }
     `}</style>
 
     <style jsx global>{`
@@ -49,10 +67,17 @@ const Humor = (props) => {
 
 Humor.getInitialProps = async ({query}) => {
   const data = await loadDB();
+
   return {
     data,
-    query
+    query,
   }
 }
+
+Humor.propTypes = {
+  data: PropTypes.object.isRequired,
+  query: PropTypes.object.isRequired,
+}
+
 
 export default Humor

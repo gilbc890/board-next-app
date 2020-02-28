@@ -1,4 +1,6 @@
 node_modules/*
 
-_app.js
+# _app.js
 next.config.js
+
+server.js
