@@ -2,20 +2,21 @@ import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 
 const Upload = () => (
     <div className="upload">
-        <button className="upload-btn">
-            <AddCircleRoundedIcon/>
-        </button>
+        <span className="upload-btn">
+            <AddCircleRoundedIcon 
+                fontSize="large"
+                style={{fill:"#5680e9", borderRadius:"50%", backgroundColor:"#fff"}}
+            />
+        </span>
+
         <style jsx>{`
             .upload-btn{
-                border-radius: 50%;
-                color: #fff;
-                background: #5680e9;
+                border-radius:50%;
+                color: #5680e9;
                 border: none;
-                font-size: 3vw;
                 position: fixed;
                 right: 5%;
                 bottom: 5%;
-                padding-bottom: 6px;
             }
             
         `}</style>
