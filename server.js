@@ -18,7 +18,6 @@ app.prepare().then(() => {
   })
 
   server.get('/humor/:id', (req, res) => {
-    console.log(req.params.slug, 'slug')
     if(!req.params.slug){
         return app.render(req, res, `/error`)
     } else {

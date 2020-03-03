@@ -1,10 +1,15 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import PropTypes from 'prop-types';
 import { CircularProgress } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
+
 
 function HumorBoard(props) {
+    const router = useRouter()
+
     const showCheck = (item) => {
-        const currentId = parseInt(props.board.query.id);
+        const currentId = parseInt(props.query.id);
         return currentId === item;
     }
     const data = props.board.data;
@@ -14,12 +19,21 @@ function HumorBoard(props) {
     }
 
     const board = Object.keys(data).map((item) => data[item])
+    const perPage = parseInt(props.perPage);
+    const endPage = parseInt(props.endPage);
 
+    const page = props.currentPage ? parseInt(props.currentPage) : 1;
+    const firstItem = (page-1)*perPage;
+    const lastItem = page*perPage;
+
+    const handleChange = (event, value) => {
+        window.location.href=`/humor?page=${value}`
+    }
 
     return(
         <div className="humor">
         <aside>
-            {board.map((item) => {
+            {board.slice(firstItem, lastItem).map((item) => {
                 const boardTitle = item.title.toLowerCase().replace(/\s+/g, "-");
                 return(
                     <div key={item.id}>
@@ -46,6 +60,12 @@ function HumorBoard(props) {
                 })
             }
         </aside>
+        <Pagination 
+            count={endPage}
+            color="primary"
+            page={page}
+            onChange={handleChange}
+        />
         <style jsx>{`
             .humor{
                 width:60%;
@@ -81,6 +101,10 @@ function HumorBoard(props) {
 
 HumorBoard.propTypes = {
     board: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired,
+    currentPage: PropTypes.string,
+    perPage: PropTypes.number.isRequired,
+    endPage: PropTypes.number.isRequired,
 }
 
 export default HumorBoard;

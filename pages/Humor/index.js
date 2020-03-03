@@ -1,30 +1,22 @@
-import Head from 'next/head'
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types';
-import Nav from '../../../components/Nav'
-import WeeklyAside from '../../../components/WeeklyAside'
-import HumorBoard from '../../../components/HumorBoard'
-import Upload from '../../../components/Upload'
+import Nav from '../../components/Nav'
+import WeeklyAside from '../../components/WeeklyAside'
+import HumorBoard from '../../components/HumorBoard'
+import Upload from '../../components/Upload'
 
-import { loadDB } from '../../../firebase/db'
+import { loadDB } from '../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 
 const Humor = (props) => {
   const router = useRouter();
-
-  const id = parseInt(props.query.id);
-  const data = props.data;
-  const query = props.query;
-  if ( !data ) {
-    return <CircularProgress />
-  }
-  const board = Object.keys(data).map((item) => data[item])
-
-  const selectedItem = board[0].find( item => item.id === id)
-
   const currentPageNumber = router.query.page;
 
+  const data = props.data;
+  const query = props.query;
+  // const [startPage, setStartPage] = useState(1);
   const [endPage, setEndPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(currentPageNumber);
 
@@ -36,7 +28,7 @@ const Humor = (props) => {
     settingPageNumber(),
     settingEndPage()
   }, []);
-// refactor later
+
   const settingPageNumber = () => {
     if(!currentPageNumber){
       setCurrentPage(1);
@@ -47,10 +39,14 @@ const Humor = (props) => {
     setEndPage(totalPage)
   }
 
+  if ( !data ) {
+    return <CircularProgress />
+  }
+
   return(
     <div className="container">
     <Head>
-      <title>{selectedItem.title}</title>
+      <title></title>
       <meta name="description" content="This is meta description Sample. We can add up to 158." />
       <link rel="canonical" href="http://example.com/" />
       <meta name="robots" content="index, follow" /> 
@@ -69,13 +65,12 @@ const Humor = (props) => {
     <Nav/>
     <main className="main-container">
       <WeeklyAside/>
-      <HumorBoard         
+      <HumorBoard 
         board={data}
         query={query}
         currentPage={currentPage}
         perPage={perPage}
         endPage={endPage}
-
       />
       <Upload/>
     </main>
