@@ -62,6 +62,7 @@ function HumorBoard(props) {
             color="primary"
             page={page}
             onChange={handleChange}
+            style={{display:"flex", justifyContent:"center"}}
         />
         <style jsx>{`
             .humor{
