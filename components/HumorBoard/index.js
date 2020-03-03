@@ -1,13 +1,10 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import PropTypes from 'prop-types';
 import { CircularProgress } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 
 
 function HumorBoard(props) {
-    const router = useRouter()
-
     const showCheck = (item) => {
         const currentId = parseInt(props.query.id);
         return currentId === item;
