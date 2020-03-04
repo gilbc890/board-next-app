@@ -1,42 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import PropTypes from 'prop-types';
 import Nav from '../../components/Nav'
 import WeeklyAside from '../../components/WeeklyAside'
 import HumorBoard from '../../components/HumorBoard'
 import Upload from '../../components/Upload'
-
 import { loadDB } from '../../firebase/db'
+import { loadMoreDB } from '../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 
 const Humor = (props) => {
-  const router = useRouter();
-  const currentPageNumber = router.query.page;
-
-  const data = props.data;
   const query = props.query;
-  // const [startPage, setStartPage] = useState(1);
-  const [endPage, setEndPage] = useState(1);
-  const [currentPage, setCurrentPage] = useState(currentPageNumber);
+  const firstItem = 0;
+  const [lastItem, setLastItem] = useState(3);
+  const [data, setData] = useState(props.data);
+  const [total, setTotal] = useState(0);
+  const [showButton, setShowButton] = useState(true);
 
-  const totalPost = data.dataLength; //from database
-  const perPage = 5;
-  const totalPage = Math.ceil(totalPost / perPage)
-
-  useEffect(() => {
-    settingPageNumber(),
-    settingEndPage()
-  }, []);
-
-  const settingPageNumber = () => {
-    if(!currentPageNumber){
-      setCurrentPage(1);
-    }
-    setCurrentPage(currentPageNumber)
-  }
-  const settingEndPage = () => {
-    setEndPage(totalPage)
+  const loadMore = async (total) => {
+    setLastItem(lastItem + 3);
+    const loadMore = await loadMoreDB(lastItem+3, total);
+    setTotal(loadMore.total);
+    setShowButton(loadMore.showButton)
+    setData(loadMore);
   }
 
   if ( !data ) {
@@ -46,7 +32,7 @@ const Humor = (props) => {
   return(
     <div className="container">
     <Head>
-      <title></title>
+      <title>Create Next App</title>
       <meta name="description" content="This is meta description Sample. We can add up to 158." />
       <link rel="canonical" href="http://example.com/" />
       <meta name="robots" content="index, follow" /> 
@@ -65,13 +51,25 @@ const Humor = (props) => {
     <Nav/>
     <main className="main-container">
       <WeeklyAside/>
-      <HumorBoard 
-        board={data}
-        query={query}
-        currentPage={currentPage}
-        perPage={perPage}
-        endPage={endPage}
-      />
+      <div className="post-container">
+        <HumorBoard 
+          board={data}
+          query={query}
+          firstItem={firstItem}
+          lastItem={lastItem}
+        />
+        {showButton ? 
+        <button
+          className="loading-btn"
+          onClick={() => loadMore(total)}
+        >
+          Load More
+        </button>
+        :
+        <div/>
+        }
+
+      </div>
       <Upload/>
     </main>
     <footer>
@@ -82,6 +80,18 @@ const Humor = (props) => {
         justify-content: space-between;
         align-items: center;
         padding: 5%;
+      }
+      .post-container{
+        width: 60%;
+        text-align: center;
+      }
+      .loading-btn{
+        padding: 1.5%;
+        margin: 5%;
+        border-radius: 20px;
+        background: #5680e9;
+        color: #fff;
+        border-color: #5680e9;
       }
     `}</style>
 
