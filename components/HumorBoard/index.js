@@ -1,8 +1,7 @@
+import React from 'react';
 import Link from 'next/link'
 import PropTypes from 'prop-types';
 import { CircularProgress } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
-
 
 function HumorBoard(props) {
     const showCheck = (item) => {
@@ -14,26 +13,17 @@ function HumorBoard(props) {
     if (!data ){
         return <CircularProgress />;
     }
-
     const board = Object.keys(data).map((item) => data[item])
-    const perPage = parseInt(props.perPage);
-    const endPage = parseInt(props.endPage);
-
-    const page = props.currentPage ? parseInt(props.currentPage) : 1;
-    const firstItem = (page-1)*perPage;
-    const lastItem = page*perPage;
-
-    const handleChange = (event, value) => {
-        window.location.href=`/humor?page=${value}`
-    }
+    const firstItem = props.firstItem;
+    const lastItem = props.lastItem;
 
     return(
         <div className="humor">
         <aside>
             {board.slice(firstItem, lastItem).map((item) => {
-                const boardTitle = item.title.toLowerCase().replace(/\s+/g, "-");
+               const boardTitle = item.title.toLowerCase().replace(/\s+/g, "-");
                 return(
-                    <div key={item.id}>
+                    <div className="post" key={item.id}>
                         <Link href={`/humor/:slug/:id`} as={`/humor/${boardTitle}/${item.id}`}>
                             <div className="board-title">
                                 <h2>{item.title}</h2>
@@ -57,16 +47,13 @@ function HumorBoard(props) {
                 })
             }
         </aside>
-        <Pagination 
-            count={endPage}
-            color="primary"
-            page={page}
-            onChange={handleChange}
-            style={{display:"flex", justifyContent:"center"}}
-        />
         <style jsx>{`
             .humor{
-                width:60%;
+                width:100%;
+                transition: opacity 20s ease-in;
+            }
+            .post{
+                transition: opacity 20s ease-in;
             }
             .board-title{
                 background: #424242;
@@ -78,6 +65,8 @@ function HumorBoard(props) {
                 justify-content: space-between;
                 align-items: center;
                 cursor: pointer;
+                transition: opacity 20s ease-in;
+
             }
             .board-context{
                 background: #424242;
@@ -100,9 +89,8 @@ function HumorBoard(props) {
 HumorBoard.propTypes = {
     board: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
-    currentPage: PropTypes.string,
-    perPage: PropTypes.number.isRequired,
-    endPage: PropTypes.number.isRequired,
+    firstItem: PropTypes.number.isRequired,
+    lastItem: PropTypes.number.isRequired,
 }
 
 export default HumorBoard;

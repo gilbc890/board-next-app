@@ -69,14 +69,15 @@ const Humor = (props) => {
     <Nav/>
     <main className="main-container">
       <WeeklyAside/>
-      <HumorBoard         
-        board={data}
-        query={query}
-        currentPage={currentPage}
-        perPage={perPage}
-        endPage={endPage}
-
-      />
+      <div className="post-container">
+        <HumorBoard         
+          board={data}
+          query={query}
+          currentPage={currentPage}
+          perPage={perPage}
+          endPage={endPage}
+        />
+      </div>
       <Upload/>
     </main>
     <footer>
@@ -87,6 +88,9 @@ const Humor = (props) => {
         justify-content: space-between;
         align-items: center;
         padding: 5%;
+      }
+      .post-container{
+        width:60%;
       }
     `}</style>
 
