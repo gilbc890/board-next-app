@@ -1,21 +1,18 @@
 import Head from 'next/head'
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'
+import React from 'react';
 import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
 import WeeklyAside from '../../../components/WeeklyAside'
 import HumorBoard from '../../../components/HumorBoard'
 import Upload from '../../../components/Upload'
-
-import { loadDB } from '../../../firebase/db'
+import { loadPost } from '../../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 
 const Humor = (props) => {
-  const router = useRouter();
-
   const id = parseInt(props.query.id);
   const data = props.data;
   const query = props.query;
+
   if ( !data ) {
     return <CircularProgress />
   }
@@ -23,29 +20,9 @@ const Humor = (props) => {
 
   const selectedItem = board[0].find( item => item.id === id)
 
-  const currentPageNumber = router.query.page;
+  const firstItem = 0;
+  const lastItem = 1;
 
-  const [endPage, setEndPage] = useState(1);
-  const [currentPage, setCurrentPage] = useState(currentPageNumber);
-
-  const totalPost = data.dataLength; //from database
-  const perPage = 5;
-  const totalPage = Math.ceil(totalPost / perPage)
-
-  useEffect(() => {
-    settingPageNumber(),
-    settingEndPage()
-  }, []);
-// refactor later
-  const settingPageNumber = () => {
-    if(!currentPageNumber){
-      setCurrentPage(1);
-    }
-    setCurrentPage(currentPageNumber)
-  }
-  const settingEndPage = () => {
-    setEndPage(totalPage)
-  }
 
   return(
     <div className="container">
@@ -73,9 +50,8 @@ const Humor = (props) => {
         <HumorBoard         
           board={data}
           query={query}
-          currentPage={currentPage}
-          perPage={perPage}
-          endPage={endPage}
+          firstItem={firstItem}
+          lastItem={lastItem}
         />
       </div>
       <Upload/>
@@ -107,7 +83,7 @@ const Humor = (props) => {
 }
 
 Humor.getInitialProps = async ({query}) => {
-  const data = await loadDB();
+  const data = await loadPost(parseInt(query.id));
 
   return {
     data,

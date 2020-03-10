@@ -1,9 +1,9 @@
 import { db } from './firebase';
 
-export const loadDB = async () => {
+export const loadDB = async (id) => {
   const postRef = db.ref('board-upload/');
   let data = [];
-  await postRef.orderByChild('id').limitToLast(3).once('value').then((snapshot) => {
+  await postRef.orderByChild('id').limitToLast(id).once('value').then((snapshot) => {
     snapshot.forEach(function(child) {
       data.push(child.val())
     })
@@ -12,6 +12,20 @@ export const loadDB = async () => {
   const dataLength = data.length;
   return { data, dataLength }
 };
+
+export const loadPost = async (id) => {
+  const postRef = db.ref('board-upload/');
+  let data = [];
+  await postRef.orderByChild('id').equalTo(id).once('value').then((snapshot) => {
+    snapshot.forEach(function(child) {
+      data.push(child.val())
+    })
+  })
+  data = data.sort((item) => item.id);
+  const dataLength = data.length;
+  return { data, dataLength }
+};
+
 export const dbLength = async () => {
   const postRef = db.ref('board-upload/');
   const total = await postRef.orderByChild('id').once('value').then((snapshot) => snapshot.val())

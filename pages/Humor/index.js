@@ -51,7 +51,7 @@ const Humor = (props) => {
     <Nav/>
     <main className="main-container">
       <WeeklyAside/>
-      <div className="post-container">
+      <div className="humor-container">
         <HumorBoard 
           board={data}
           query={query}
@@ -81,7 +81,7 @@ const Humor = (props) => {
         align-items: center;
         padding: 5%;
       }
-      .post-container{
+      .humor-container{
         width: 60%;
         text-align: center;
       }
@@ -108,7 +108,7 @@ const Humor = (props) => {
 }
 
 Humor.getInitialProps = async ({query}) => {
-  const data = await loadDB();
+  const data = await loadDB(3);
 
   return {
     data,
