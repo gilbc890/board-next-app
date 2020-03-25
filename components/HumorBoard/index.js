@@ -5,8 +5,6 @@ import { CircularProgress } from '@material-ui/core';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 function HumorBoard(props) {
-    const transitionEffect = useState(true);
-
     const showCheck = (item) => {
         const currentId = parseInt(props.query.id);
         return currentId === item;
@@ -28,7 +26,6 @@ function HumorBoard(props) {
                 const boardTitle = item.title.toLowerCase().replace(/\s+/g, "-");
                     return(
                         <CSSTransition
-                            in={transitionEffect}
                             timeout={500}
                             classNames="fade"
                             key={item.id}
