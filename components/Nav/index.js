@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import MenuIcon from '@material-ui/icons/Menu';
-import { authWithFacebook } from '../../firebase/auth';
+import { authWithFacebook, signOut } from '../../firebase/auth';
 // import Session from '../Session';
 
 const Nav = () => {
@@ -28,12 +28,19 @@ const Nav = () => {
             <img src="/logo.png" className="logo-img" alt="logo" />
         </a>
         {user ? 
-          <div>
-            <div>
-              <img src={user.photoURL} alt="Profile Picture"/>
+          <button
+            className="user-btn"
+          >
+            <div className="profile-pic">
+              <img 
+                src={user.photoURL} 
+                alt="Profile Picture"
+              />
             </div>
-            {user.displayName}
-          </div>
+            <div>
+              {user.displayName}
+            </div>
+          </button>
         :
           <button 
           className="log-btn"
@@ -44,10 +51,10 @@ const Nav = () => {
         }
       </nav>
       <style jsx>{`
-        .nav{
+        .nav {
           background: #fff;
         }
-        .nav-container{
+        .nav-container {
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -55,23 +62,36 @@ const Nav = () => {
           margin: auto;
           padding: 1%;
         }
-        .bar-menu{
+        .bar-menu {
           border: none;
           color: #5680e9;
         }
-        .logo{
+        .logo {
           width: 50%;
           text-align: center;
         }
-        .logo-img{
+        .logo-img {
           width: 10%;
         }
-        .log-btn{
+        .log-btn {
           width: 5%;
           height: 4vh;
           background-color: #5680e9;
           color: #fff;
           border-radius: 20px;
+        }
+        .user-btn {
+          background: none;
+          border-width: 0;
+        }
+        .user-btn:focus {
+          outline: none;
+        }
+        .profile-pic {
+          text-align: center;
+        }
+        .profile-pic>img {
+          border-radius: 50%;
         }
       `}</style>
     </div>
