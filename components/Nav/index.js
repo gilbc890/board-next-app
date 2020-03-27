@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import firebase from 'firebase/app';
+import { auth } from '../../firebase';
 import MenuIcon from '@material-ui/icons/Menu';
 import { authWithFacebook, signOut } from '../../firebase/auth';
-// import Session from '../Session';
 
 const Nav = () => {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    auth.onAuthStateChanged((user) => {
     if (user) {
         setUser(user);
-        console.log(user, 'user')
-    } else{
-        console.log('no log')
-    }
+    } 
     });  
 },[]);
 
@@ -24,12 +20,15 @@ const Nav = () => {
         <button className="bar-menu">
           <MenuIcon/>
         </button>
-        <a href="/" className="logo">
+        <div className="logo-container">
+          <a href="/" className="logo">
             <img src="/logo.png" className="logo-img" alt="logo" />
-        </a>
+          </a>
+        </div>
         {user ? 
           <button
             className="user-btn"
+            onClick={() => signOut()}
           >
             <div className="profile-pic">
               <img 
@@ -37,7 +36,7 @@ const Nav = () => {
                 alt="Profile Picture"
               />
             </div>
-            <div>
+            <div className="username">
               {user.displayName}
             </div>
           </button>
@@ -66,8 +65,11 @@ const Nav = () => {
           border: none;
           color: #5680e9;
         }
+        .logo-container {
+          margin: auto;
+          text-align: center;
+        }
         .logo {
-          width: 50%;
           text-align: center;
         }
         .logo-img {
@@ -91,7 +93,11 @@ const Nav = () => {
           text-align: center;
         }
         .profile-pic>img {
+          width: 60%;
           border-radius: 50%;
+        }
+        .username { 
+          font-size: 0.9vw;
         }
       `}</style>
     </div>
