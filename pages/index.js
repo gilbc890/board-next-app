@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { auth } from '../firebase';
 import Head from 'next/head'
 import Nav from '../components/Nav'
 
 const Home = () => {
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } 
+    });  
+  },[]);
 
   return (
   <div className="container">
@@ -24,7 +34,7 @@ const Home = () => {
       <meta name="twitter:creator" content="@USERNAME" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
-    <Nav/>
+    <Nav user={user} />
     <footer>
     </footer>
     <style jsx>{`
@@ -40,5 +50,12 @@ const Home = () => {
   </div>
 )
 }
+
+Home.getInitialProps = async () => {
+
+  return {
+  }
+}
+
 
 export default Home

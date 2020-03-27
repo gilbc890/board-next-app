@@ -1,18 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { auth } from '../../firebase';
+import React from 'react';
+import PropTypes from 'prop-types';
 import MenuIcon from '@material-ui/icons/Menu';
 import { authWithFacebook, signOut } from '../../firebase/auth';
 
-const Nav = () => {
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-    if (user) {
-        setUser(user);
-    } 
-    });  
-},[]);
+const Nav = (props) => {
+  const { user } = props;
 
   return (
     <div className="nav">
@@ -103,5 +95,10 @@ const Nav = () => {
     </div>
   )
 }
+
+Nav.propTypes = {
+  user: PropTypes.object,
+}
+
 
 export default Nav;
