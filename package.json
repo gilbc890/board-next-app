@@ -6,7 +6,7 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "lint": "eslint --ext .js,.jsx --format table ."
+    "lint": "eslint --ext .js,.jsx --fix --format table ."
   },
   "dependencies": {
     "@material-ui/core": "^4.9.4",
@@ -14,7 +14,7 @@
     "@material-ui/lab": "^4.0.0-alpha.44",
     "@zeit/next-css": "^1.0.1",
     "express": "^4.17.1",
-    "firebase": "^7.9.2",
+    "firebase": "^7.13.0",
     "next": "9.2.2",
     "prop-types": "^15.7.2",
     "react": "16.13.0",

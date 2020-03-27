@@ -1,4 +1,4 @@
-import { db } from './firebase';
+import { db } from './';
 
 export const loadDB = async (id) => {
   const postRef = db.ref('board-upload/');

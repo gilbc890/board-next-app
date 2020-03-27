@@ -14,7 +14,7 @@ yarn-debug.log*
 yarn-error.log*
 
 #firebase
-firebase.js
+firebase/index.js
 
 #design
 board-next.fig

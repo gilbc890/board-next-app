@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import PropTypes from 'prop-types';
 import Nav from '../../components/Nav'
@@ -7,7 +7,9 @@ import HumorBoard from '../../components/HumorBoard'
 import Upload from '../../components/Upload'
 import { loadDB } from '../../firebase/db'
 import { loadMoreDB } from '../../firebase/db'
+import { auth } from '../../firebase';
 import { CircularProgress } from '@material-ui/core';
+
 
 const Humor = (props) => {
   const query = props.query;
@@ -16,6 +18,16 @@ const Humor = (props) => {
   const [data, setData] = useState(props.data);
   const [total, setTotal] = useState(0);
   const [showButton, setShowButton] = useState(true);
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } 
+    });  
+  },[]);
+
 
   const loadMore = async (total) => {
     setLastItem(lastItem + 3);
@@ -48,7 +60,7 @@ const Humor = (props) => {
       <meta name="twitter:site" content="@USERNAME"/>
       <meta name="twitter:creator" content="@USERNAME" />
     </Head>
-    <Nav/>
+    <Nav user={user} />
     <main className="main-container">
       <WeeklyAside/>
       <div className="humor-container">
@@ -70,7 +82,11 @@ const Humor = (props) => {
         }
 
       </div>
-      <Upload/>
+      {user ?
+        <Upload />
+        :
+        <div />
+      }
     </main>
     <footer>
     </footer>

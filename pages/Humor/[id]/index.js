@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
-import React from 'react';
 import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
 import WeeklyAside from '../../../components/WeeklyAside'
@@ -7,11 +7,21 @@ import HumorBoard from '../../../components/HumorBoard'
 import Upload from '../../../components/Upload'
 import { loadPost } from '../../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
+import { auth } from '../../../firebase';
 
 const Humor = (props) => {
   const id = parseInt(props.query.id);
   const data = props.data;
   const query = props.query;
+  const [user, setUser] = useState();
+  
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } 
+    });  
+  },[]);
 
   if ( !data ) {
     return <CircularProgress />
@@ -43,7 +53,7 @@ const Humor = (props) => {
       <meta name="twitter:site" content="@USERNAME"/>
       <meta name="twitter:creator" content="@USERNAME" />
     </Head>
-    <Nav/>
+    <Nav user={user} />
     <main className="main-container">
       <WeeklyAside/>
       <div className="post-container">
@@ -54,7 +64,11 @@ const Humor = (props) => {
           lastItem={lastItem}
         />
       </div>
-      <Upload/>
+      {user ?
+        <Upload/>
+        :
+        <div />
+      }
     </main>
     <footer>
     </footer>
