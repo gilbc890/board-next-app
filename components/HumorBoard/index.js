@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link'
 import PropTypes from 'prop-types';
+import Comments from '../Comments';
 import { CircularProgress } from '@material-ui/core';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -34,7 +35,10 @@ function HumorBoard(props) {
                             <Link href={`/humor/:slug/:id`} as={`/humor/${boardTitle}/${item.id}`}>
                                 <div className="board-title">
                                     <h2>{item.title}</h2>
-                                    <span>icon</span>
+                                    <div className="board-user">
+                                        <img src={item.author.author_img} alt="profile"/>
+                                        <div className="board-uid">{item.author.author_uid}</div>
+                                    </div>
                                 </div>
                             </Link>
                             {showCheck(item.id) ? 
@@ -43,8 +47,12 @@ function HumorBoard(props) {
                                     <img src={`${item.img}`} alt="post-img"/>
                                 </div>
                                 <div className="context-text">
-                                    {item.body}
+                                    {item.content}
                                 </div>
+                                <Comments 
+                                    reply={item.reply} 
+                                    number={Object.keys(item.reply).length}
+                                />
                             </div>
                             :
                             <div className="blank"/>
@@ -54,14 +62,13 @@ function HumorBoard(props) {
                     )
                     })
                 }
-
             </TransitionGroup>
         </aside>
         <style jsx>{`
-            .humor{
-                width:100%;
+            .humor {
+                width: 100%;
             }
-            .board-title{
+            .board-title {
                 background: #424242;
                 border-radius: 20px 20px 0 0;
                 padding: 1% 5%;
@@ -72,7 +79,21 @@ function HumorBoard(props) {
                 align-items: center;
                 cursor: pointer;
             }
-
+            .board-title > h2 {
+                width: 80%;
+                text-align: left;
+            }
+            .board-user {
+                width: 10%;
+                text-align: center;
+            }
+            .board-uid {
+                font-size: 1vw;
+            }
+            .board-user>img {
+                width: 60%;
+                border-radius: 50%;
+            }
             .fade-enter {
                 opacity: 0;
             }  
@@ -86,19 +107,18 @@ function HumorBoard(props) {
             .fade-exit-active {
                 transition: all 0.5s;
             }
-
-            .board-context{
+            .board-context {
                 background: #424242;
                 border-radius: 0 0 20px 20px;
                 padding: 5%;
                 color: #fff;
-                margin-bottom: 1%;
             }
-            .context-img{
+            .context-img {
                 text-align: center;
             }
-            .context-text{
+            .context-text {
                 padding-top: 5%;
+                margin: 1% 5% 5%;
             }
         `}</style>
     </div>
