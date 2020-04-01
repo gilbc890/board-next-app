@@ -1,20 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReComments from '../ReComments';
 
-function Comments(props) {
+const Comments = (props) => {
     const { reply, number } = props;
     const comment = Object.keys(reply).map((item) => reply[item]);
 
     return(
-        <div className="comment">
+        <div className="comments">
             {comment.slice(0, number).map((item) => {
                 return  (
-                    <div key={item.id} className="comment-wrapper">
-                        <div className="comment-user">
-                            <img src={item.author.author_img} alt="profile"/>
-                            <div className="comment-uid">{item.author.author_uid}</div>
+                    <div key={item.id} className="comment">
+                        <div className="comment-wrapper">
+                            <div className="comment-user">
+                                <img src={item.author.author_img} alt="profile"/>
+                                <div className="comment-uid">{item.author.author_uid}</div>
+                            </div>
+                            <div>{item.content}</div>
                         </div>
-                        <div>{item.content}</div>
+                        {item.re_reply ?
+                            <ReComments 
+                                re_reply={item.re_reply} 
+                                re_number={Object.keys(item.re_reply).length}
+                            />
+                            :
+                            <div/>
+                        }
                     </div>
                     )
                 })

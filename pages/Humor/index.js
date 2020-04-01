@@ -3,7 +3,7 @@ import Head from 'next/head'
 import PropTypes from 'prop-types';
 import Nav from '../../components/Nav'
 import WeeklyAside from '../../components/WeeklyAside'
-import HumorBoard from '../../components/HumorBoard'
+import HumorList from '../../components/HumorList'
 import Upload from '../../components/Upload'
 import { loadDB } from '../../firebase/db'
 import { loadMoreDB } from '../../firebase/db'
@@ -64,7 +64,7 @@ const Humor = (props) => {
     <main className="main-container">
       <WeeklyAside/>
       <div className="humor-container">
-        <HumorBoard 
+        <HumorList 
           board={data}
           query={query}
           firstItem={firstItem}

@@ -1,15 +1,10 @@
 import React from 'react';
 import Link from 'next/link'
 import PropTypes from 'prop-types';
-import Comments from '../Comments';
 import { CircularProgress } from '@material-ui/core';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-function HumorBoard(props) {
-    const showCheck = (item) => {
-        const currentId = parseInt(props.query.id);
-        return currentId === item;
-    }
+const HumorList = (props) => {
     const data = props.board.data;
 
     if (!data ){
@@ -41,22 +36,6 @@ function HumorBoard(props) {
                                     </div>
                                 </div>
                             </Link>
-                            {showCheck(item.id) ? 
-                            <div className="board-context">
-                                <div className="context-img">
-                                    <img src={`${item.img}`} alt="post-img"/>
-                                </div>
-                                <div className="context-text">
-                                    {item.content}
-                                </div>
-                                <Comments 
-                                    reply={item.reply} 
-                                    number={Object.keys(item.reply).length}
-                                />
-                            </div>
-                            :
-                            <div className="blank"/>
-                            }
                         </div>
                     </CSSTransition>
                     )
@@ -107,29 +86,16 @@ function HumorBoard(props) {
             .fade-exit-active {
                 transition: all 0.5s;
             }
-            .board-context {
-                background: #424242;
-                border-radius: 0 0 20px 20px;
-                padding: 5%;
-                color: #fff;
-            }
-            .context-img {
-                text-align: center;
-            }
-            .context-text {
-                padding-top: 5%;
-                margin: 1% 5% 5%;
-            }
         `}</style>
     </div>
     )
 }
 
-HumorBoard.propTypes = {
+HumorList.propTypes = {
     board: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
     firstItem: PropTypes.number.isRequired,
     lastItem: PropTypes.number.isRequired,
 }
 
-export default HumorBoard;
+export default HumorList;

@@ -3,7 +3,7 @@ import Head from 'next/head'
 import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
 import WeeklyAside from '../../../components/WeeklyAside'
-import HumorBoard from '../../../components/HumorBoard'
+import HumorPost from '../../../components/HumorPost'
 import Upload from '../../../components/Upload'
 import { loadPost } from '../../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
@@ -27,12 +27,7 @@ const Humor = (props) => {
     return <CircularProgress />
   }
   const board = Object.keys(data).map((item) => data[item])
-
   const selectedItem = board[0].find( item => item.id === id)
-
-  const firstItem = 0;
-  const lastItem = 1;
-
 
   return(
     <div className="container">
@@ -57,11 +52,9 @@ const Humor = (props) => {
     <main className="main-container">
       <WeeklyAside/>
       <div className="post-container">
-        <HumorBoard         
-          board={data}
+        <HumorPost         
+          post={data}
           query={query}
-          firstItem={firstItem}
-          lastItem={lastItem}
         />
       </div>
       {user ?
