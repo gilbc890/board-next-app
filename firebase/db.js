@@ -1,7 +1,7 @@
 import { db } from './';
 
 export const loadDB = async (id) => {
-  const postRef = db.ref('board-upload/');
+  const postRef = db.ref('posts/');
   let data = [];
   await postRef.orderByChild('id').limitToLast(id).once('value').then((snapshot) => {
     snapshot.forEach(function(child) {
@@ -14,7 +14,7 @@ export const loadDB = async (id) => {
 };
 
 export const loadPost = async (id) => {
-  const postRef = db.ref('board-upload/');
+  const postRef = db.ref('posts/');
   let data = [];
   await postRef.orderByChild('id').equalTo(id).once('value').then((snapshot) => {
     snapshot.forEach(function(child) {
@@ -27,14 +27,14 @@ export const loadPost = async (id) => {
 };
 
 export const dbLength = async () => {
-  const postRef = db.ref('board-upload/');
+  const postRef = db.ref('posts/');
   const total = await postRef.orderByChild('id').once('value').then((snapshot) => snapshot.val())
   const totalLength = Object.keys(total).length;
   return totalLength;
 }
 
 export const loadMoreDB = async (endNum, total) => {
-  const postRef = db.ref('board-upload/');
+  const postRef = db.ref('posts/');
   let data = [];
   await postRef.orderByChild('id').limitToLast(endNum).once('value').then((snapshot) => {
     snapshot.forEach(function(child) {
@@ -47,7 +47,6 @@ export const loadMoreDB = async (endNum, total) => {
   if(total === 0 ){
     const total = await dbLength();
     if (endNum > total ){
-      console.log('this')
       const showButton = false;
       return { data, dataLength, total, showButton }
     } else {
@@ -56,7 +55,6 @@ export const loadMoreDB = async (endNum, total) => {
     }
   } else {
     if (endNum > total ){
-      console.log('this')
       const showButton = false;
       return { data, dataLength, total, showButton }
     } else {

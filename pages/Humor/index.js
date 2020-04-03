@@ -28,7 +28,6 @@ const Humor = (props) => {
     });  
   },[]);
 
-
   const loadMore = async (total) => {
     setLastItem(lastItem + 3);
     const loadMore = await loadMoreDB(lastItem+3, total);

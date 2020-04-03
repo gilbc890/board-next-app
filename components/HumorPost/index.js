@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Comments from '../Comments';
 import Likes from '../Likes';
@@ -6,16 +6,11 @@ import { CircularProgress } from '@material-ui/core';
 
 const HumorPost = (props) => {
     const data = props.post.data[0];
-    const [countLikes, setCountLikes] = useState(0);
+    
     if (!data ){
         return <CircularProgress />;
     }
-    useEffect(() => {
-        if ( data.likes ) {
-            setCountLikes(Object.keys(data.likes).map((item) => data.likes[item]).length);
-        }
-    }, []);
-
+    
     return(
         <div className="humor">
         <aside className="post-container">
@@ -32,11 +27,9 @@ const HumorPost = (props) => {
                         <img src={`${data.img}`} alt="post-img"/>
                     </div>
                         <div className="context-text">
-                               {data.content}
+                            {data.content}
                         </div>
-                        <Likes
-                            count={countLikes}
-                        />
+                        <Likes />
                         <Comments 
                             reply={data.reply} 
                             number={Object.keys(data.reply).length}
