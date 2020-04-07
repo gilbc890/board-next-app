@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import firebase from 'firebase/app';
 
-const Likes = () => {
+const Likes = (props) => {
+    const { user } = props;
     const [countLikes, setCountLikes] = useState();
 
     useEffect(() => {
@@ -40,7 +42,11 @@ const Likes = () => {
         });
 
         if(checkLikedUser()){
-            setCountLikes(countLikes-1)
+            if(countLikes === 0){
+                setCountLikes(0)
+            } else {
+                setCountLikes(countLikes-1)
+            }
         } else{
             setCountLikes(countLikes+1)
         }
@@ -48,18 +54,33 @@ const Likes = () => {
     
     return(
         <div className="likes">
-            <button
-                className="like-btn"
-                onClick={() => likes()}
-            >
-                <ThumbUpIcon />
-                {countLikes
-                ?
-                    <span className="count">{countLikes}</span>
-                :
-                    <span/>
-                }
-            </button>
+            {user?
+                <button
+                    className="like-btn"
+                    onClick={() => likes()}
+                >
+                    <ThumbUpIcon />
+                    {countLikes
+                    ?
+                        <span className="count">{countLikes}</span>
+                    :
+                        <span/>
+                    }
+                </button>
+            :
+                <button
+                    className="like-btn disabled-btn"
+                    disabled
+                >
+                    <ThumbUpIcon />
+                    {countLikes
+                    ?
+                        <span className="count">{countLikes}</span>
+                    :
+                        <span/>
+                    }
+                </button>
+            }
 
         <style jsx>{`
             .likes {
@@ -75,6 +96,9 @@ const Likes = () => {
                 display: flex;
                 align-items: center;
             }
+            .disabled-btn {
+                cursor: auto;
+            }
             .count {
                 margin: 10%;
                 font-size: 1.5vw;
@@ -84,5 +108,9 @@ const Likes = () => {
     </div>
     )
 }
-  
+
+Likes.propTypes = {
+    user: PropTypes.object,
+}
+
 export default Likes;

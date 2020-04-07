@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Comments from '../Comments';
 import Likes from '../Likes';
+import WriteComment from '../WriteComment';
 import { CircularProgress } from '@material-ui/core';
 
 const HumorPost = (props) => {
     const data = props.post.data[0];
+    const { user } = props;
     
     if (!data ){
         return <CircularProgress />;
@@ -29,10 +31,20 @@ const HumorPost = (props) => {
                         <div className="context-text">
                             {data.content}
                         </div>
-                        <Likes />
+                        <Likes
+                            user={user}
+                        />
+                        {user ?
+                            <WriteComment
+                                user={user}
+                            />
+                            :
+                            <div/>
+                        }
                         <Comments 
                             reply={data.reply} 
                             number={Object.keys(data.reply).length}
+                            user={user}
                         />
                     </div>
             </div>
@@ -86,6 +98,7 @@ const HumorPost = (props) => {
 
 HumorPost.propTypes = {
     post: PropTypes.object.isRequired,
+    user: PropTypes.object,
 }
 
 export default HumorPost;

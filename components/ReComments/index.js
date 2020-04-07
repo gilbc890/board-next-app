@@ -9,10 +9,10 @@ function ReComments(props) {
         <div className="re-comments">
             {reComments.slice(0, re_number).map((item) => {
                 return  (
-                    <div key={item.id} className="re-comment-wrapper">
+                    <div key={item.timestamp} className="re-comment-wrapper">
                         <div className="re-comment-user">
                             <img src={item.author.author_img} alt="profile"/>
-                            <div className="re-comment-uid">{item.author.author_uid}</div>
+                            <div className="re-comment-uid">{item.author.author_name}</div>
                         </div>
                         <div>{item.content}</div>
                     </div>

@@ -55,6 +55,7 @@ const Humor = (props) => {
         <HumorPost         
           post={data}
           query={query}
+          user={user}
         />
       </div>
       {user ?
@@ -66,13 +67,13 @@ const Humor = (props) => {
     <footer>
     </footer>
     <style jsx>{`
-      .main-container{
+      .main-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 5%;
       }
-      .post-container{
+      .post-container {
         width:60%;
       }
     `}</style>

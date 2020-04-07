@@ -1,28 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ReComments from '../ReComments';
+import WriteReComment from '../WriteReComment';
+import ReplyIcon from '@material-ui/icons/Reply';
 
 const Comments = (props) => {
-    const { reply, number } = props;
-    const comment = Object.keys(reply).map((item) => reply[item]);
+    const { reply, number, user } = props;
+    const comment = Object.keys(reply).map((item) => reply[item]).sort((a,b) => b.timestamp - a.timestamp);
+    const [writeReReply, setWriteReReply] = useState(false);
+    const [timestampId, setTimestampId] = useState();
+
+    const showWriteReComment = (id) => {
+        setWriteReReply(!writeReReply);
+        setTimestampId(id);
+    }
 
     return(
         <div className="comments">
             {comment.slice(0, number).map((item) => {
                 return  (
-                    <div key={item.id} className="comment">
+                    <div key={item.timestamp} className="comment">
                         <div className="comment-wrapper">
                             <div className="comment-user">
                                 <img src={item.author.author_img} alt="profile"/>
-                                <div className="comment-uid">{item.author.author_uid}</div>
+                                <div className="comment-uid">{item.author.author_name}</div>
                             </div>
-                            <div>{item.content}</div>
+                            <div className="content">{item.content}</div>
+                            {user? 
+                                <button 
+                                    className="re-reply"
+                                    onClick={() => showWriteReComment(item.timestamp)}
+                                >
+                                    <ReplyIcon/>
+                                </button>
+                                :
+                                <div/>
+                            }
                         </div>
                         {item.re_reply ?
                             <ReComments 
                                 re_reply={item.re_reply} 
                                 re_number={Object.keys(item.re_reply).length}
                             />
+                            :
+                            <div/>
+                        }
+                        {timestampId === item.timestamp && writeReReply?
+                            <div>
+                                <WriteReComment
+                                    reply_key={item.id}
+                                />
+                            </div>
                             :
                             <div/>
                         }
@@ -50,6 +78,15 @@ const Comments = (props) => {
             .comment-uid {
                 font-size: 1vw;
             }
+            .content { 
+                width: 70%;
+            }
+            .re-reply {
+                background: transparent;
+                border: none;
+                width: 10%;
+                cursor: pointer;
+            }
         `}</style>
     </div>
     )
@@ -58,6 +95,7 @@ const Comments = (props) => {
 Comments.propTypes = {
     reply: PropTypes.object,
     number: PropTypes.number,
+    user: PropTypes.object,
 }
 
 export default Comments;
