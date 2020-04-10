@@ -5,19 +5,19 @@ import WriteReComment from '../WriteReComment';
 import ReplyIcon from '@material-ui/icons/Reply';
 
 const Comments = (props) => {
-    const { reply, number, user } = props;
+    const { reply, user } = props;
     const comment = Object.keys(reply).map((item) => reply[item]).sort((a,b) => b.timestamp - a.timestamp);
     const [writeReReply, setWriteReReply] = useState(false);
     const [timestampId, setTimestampId] = useState();
-
+    
     const showWriteReComment = (id) => {
         setWriteReReply(!writeReReply);
         setTimestampId(id);
     }
-
+    
     return(
         <div className="comments">
-            {comment.slice(0, number).map((item) => {
+            {comment.slice(0, reply.length).map((item) => {
                 return  (
                     <div key={item.timestamp} className="comment">
                         <div className="comment-wrapper">
@@ -94,7 +94,6 @@ const Comments = (props) => {
 
 Comments.propTypes = {
     reply: PropTypes.object,
-    number: PropTypes.number,
     user: PropTypes.object,
 }
 

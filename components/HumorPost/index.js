@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Comments from '../Comments';
 import Likes from '../Likes';
 import WriteComment from '../WriteComment';
+import { loadReply } from '../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 
 const HumorPost = (props) => {
     const data = props.post.data[0];
-    const { user } = props;
-    
+    const { user, query } = props;
+
+    const [commentRefresh, setCommentRefresh] = useState(false);
+    const [replyData, setReplyData] = useState(data.reply);
+
+    useEffect(() => {
+        if (commentRefresh) {
+            setCommentRefresh(!commentRefresh);
+        }
+        replyUpdate();
+    });
+
+    const replyUpdate = async () => {
+        if ( commentRefresh ){
+            const res = await loadReply(query);
+            return setReplyData(res);
+        } 
+    }
+      
     if (!data ){
         return <CircularProgress />;
     }
@@ -36,14 +54,13 @@ const HumorPost = (props) => {
                         />
                         {user ?
                             <WriteComment
-                                user={user}
+                                commentRefresh={() => setCommentRefresh(!commentRefresh)}
                             />
                             :
                             <div/>
                         }
                         <Comments 
-                            reply={data.reply} 
-                            number={Object.keys(data.reply).length}
+                            reply={replyData} 
                             user={user}
                         />
                     </div>
@@ -99,6 +116,7 @@ const HumorPost = (props) => {
 HumorPost.propTypes = {
     post: PropTypes.object.isRequired,
     user: PropTypes.object,
+    query: PropTypes.number,
 }
 
 export default HumorPost;

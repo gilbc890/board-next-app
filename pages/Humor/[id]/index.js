@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
 import WeeklyAside from '../../../components/WeeklyAside'
 import HumorPost from '../../../components/HumorPost'
-import Upload from '../../../components/Upload'
 import { loadPost } from '../../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 import { auth } from '../../../firebase';
@@ -54,15 +53,10 @@ const Humor = (props) => {
       <div className="post-container">
         <HumorPost         
           post={data}
-          query={query}
+          query={parseInt(query.id)}
           user={user}
         />
       </div>
-      {user ?
-        <Upload/>
-        :
-        <div />
-      }
     </main>
     <footer>
     </footer>
@@ -71,10 +65,10 @@ const Humor = (props) => {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 5%;
+        padding: 10%;
       }
       .post-container {
-        width:60%;
+        width: 65%;
       }
     `}</style>
 

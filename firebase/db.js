@@ -26,6 +26,19 @@ export const loadPost = async (id) => {
   return { data, dataLength }
 };
 
+export const loadReply = async (id) => {
+  const postRef = db.ref('posts/');
+  let data = [];
+  await postRef.orderByChild('id').equalTo(id).once('value').then((snapshot) => {
+    snapshot.forEach(function(child) {
+      data.push(child.val())
+    })
+  })
+  data = data.sort((item) => item.id);
+  const reply = data[0].reply
+  return reply
+};
+
 export const dbLength = async () => {
   const postRef = db.ref('posts/');
   const total = await postRef.orderByChild('id').once('value').then((snapshot) => snapshot.val())

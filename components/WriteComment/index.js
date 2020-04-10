@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 
-const WriteComment = () => {
+const WriteComment = (props) => {
+    const { commentRefresh } = props;
     const [comment, setComment] = useState();
-
+    
     // firebase function re-factor the code
     const commentSubmit = async () => {
         const user = firebase.auth().currentUser;
@@ -23,6 +25,7 @@ const WriteComment = () => {
             "timestamp": new Date().getTime(),
             "id": key,
         })
+        commentRefresh();
     }
 
     return(
@@ -62,17 +65,23 @@ const WriteComment = () => {
             margin: 1% 0.5%;
             border-radius: 8px;
             padding: 2.5%;
+            border-color: transparent;
         }
         .comment-btn {
-            width:10%;
+            width: 10%;
             margin: 1% 0.5%;
             border-radius: 8px;
             cursor: pointer;
-            font-size:1.5vw;
+            font-size: 1.5vw;
+            broder-color: transparent;
         }
         `}</style>
     </div>
     )
+}
+
+WriteComment.propTypes = {
+    commentRefresh: PropTypes.func,
 }
 
 export default WriteComment;

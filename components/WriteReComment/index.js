@@ -6,8 +6,6 @@ const WriteReComment = (props) => {
     const [comment, setComment] = useState();
     const { reply_key } = props;
     
-    console.log(reply_key, 'props')
-
     // firebase function re-factor the code
     const commentSubmit = async (reply_key) => {
         const user = firebase.auth().currentUser;
