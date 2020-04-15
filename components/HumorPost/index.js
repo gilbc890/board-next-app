@@ -16,15 +16,13 @@ const HumorPost = (props) => {
     useEffect(() => {
         if (commentRefresh) {
             setCommentRefresh(!commentRefresh);
+            replyUpdate();
         }
-        replyUpdate();
     });
 
     const replyUpdate = async () => {
-        if ( commentRefresh ){
-            const res = await loadReply(query);
-            return setReplyData(res);
-        } 
+        const res = await loadReply(query);
+        return setReplyData(res);
     }
       
     if (!data ){
@@ -59,10 +57,15 @@ const HumorPost = (props) => {
                             :
                             <div/>
                         }
-                        <Comments 
-                            reply={replyData} 
-                            user={user}
-                        />
+                        {replyData  ?
+                            <Comments 
+                                reply={replyData} 
+                                user={user}
+                                commentRefresh={() => setCommentRefresh(!commentRefresh)}
+                            />                        
+                            :
+                            <div/>
+                        }
                     </div>
             </div>
         </aside>

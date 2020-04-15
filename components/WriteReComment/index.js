@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 
 const WriteReComment = (props) => {
+    const { reply_key, reCommentRefresh } = props;
     const [comment, setComment] = useState();
-    const { reply_key } = props;
     
-    console.log(reply_key, 'props')
-
     // firebase function re-factor the code
     const commentSubmit = async (reply_key) => {
         const user = firebase.auth().currentUser;
@@ -27,6 +25,7 @@ const WriteReComment = (props) => {
             "timestamp": new Date().getTime(),
             "id": key,
         })
+        reCommentRefresh();
     }
 
     return(
@@ -72,6 +71,7 @@ const WriteReComment = (props) => {
 
 WriteReComment.propTypes = {
     reply_key: PropTypes.string.isRequired,
+    reCommentRefresh: PropTypes.func,
 }
 
 export default WriteReComment;

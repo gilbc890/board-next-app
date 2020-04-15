@@ -1,19 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ReComments from '../ReComments';
 import WriteReComment from '../WriteReComment';
 import ReplyIcon from '@material-ui/icons/Reply';
 
 const Comments = (props) => {
-    const { reply, user } = props;
-    const comment = Object.keys(reply).map((item) => reply[item]).sort((a,b) => b.timestamp - a.timestamp);
+    const { reply, user, commentRefresh } = props;
+    const defaultComment = Object.keys(reply).map((item) => reply[item]).sort((a,b) => b.timestamp - a.timestamp);
     const [writeReReply, setWriteReReply] = useState(false);
     const [timestampId, setTimestampId] = useState();
+    const [comment, setComment] = useState(defaultComment);
+    const [reCommentRefresh, setReCommentRefresh] = useState(false);
+    const prev = useRef();
     
+    useEffect(() => {
+        prev.current = reply;
+        const prevProps = Object.keys(reply).map((item) => reply[item]);
+
+        if (prevProps.length !== comment.length){
+            setComment(defaultComment);
+        }
+
+        if (reCommentRefresh) {
+            commentRefresh();
+            setReCommentRefresh(!reCommentRefresh);
+            setComment(defaultComment);
+        }
+    },[reply]);
+
+
     const showWriteReComment = (id) => {
         setWriteReReply(!writeReReply);
         setTimestampId(id);
     }
+
+    console.log(comment,  'comment')
     
     return(
         <div className="comments">
@@ -49,6 +70,7 @@ const Comments = (props) => {
                             <div>
                                 <WriteReComment
                                     reply_key={item.id}
+                                    reCommentRefresh={() => setReCommentRefresh(!reCommentRefresh)}
                                 />
                             </div>
                             :
@@ -93,8 +115,9 @@ const Comments = (props) => {
 }
 
 Comments.propTypes = {
-    reply: PropTypes.object,
+    reply: PropTypes.object.isRequired,
     user: PropTypes.object,
+    commentRefresh: PropTypes.func,
 }
 
 export default Comments;
