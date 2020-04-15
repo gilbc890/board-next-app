@@ -26,6 +26,7 @@ const WriteReComment = (props) => {
             "id": key,
         })
         reCommentRefresh();
+        setComment('');
     }
 
     return(
@@ -36,6 +37,7 @@ const WriteReComment = (props) => {
                 cols="30" 
                 rows="2"
                 placeholder={'댓글의 댓글을 입력해주세요'}
+                value={comment}
                 onChange={(e) => setComment(e.currentTarget.value)}
             >
             </textarea>

@@ -62,6 +62,7 @@ const HumorPost = (props) => {
                                 reply={replyData} 
                                 user={user}
                                 commentRefresh={() => setCommentRefresh(!commentRefresh)}
+                                query={query}
                             />                        
                             :
                             <div/>

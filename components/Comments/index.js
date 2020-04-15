@@ -3,20 +3,22 @@ import PropTypes from 'prop-types';
 import ReComments from '../ReComments';
 import WriteReComment from '../WriteReComment';
 import ReplyIcon from '@material-ui/icons/Reply';
+import { loadReply } from '../../firebase/db'
 
 const Comments = (props) => {
-    const { reply, user, commentRefresh } = props;
+    const { reply, user, commentRefresh, query } = props;
     const defaultComment = Object.keys(reply).map((item) => reply[item]).sort((a,b) => b.timestamp - a.timestamp);
     const [writeReReply, setWriteReReply] = useState(false);
     const [timestampId, setTimestampId] = useState();
     const [comment, setComment] = useState(defaultComment);
     const [reCommentRefresh, setReCommentRefresh] = useState(false);
+    const [tempRes, setTempRes] = useState();
     const prev = useRef();
     
     useEffect(() => {
         prev.current = reply;
         const prevProps = Object.keys(reply).map((item) => reply[item]);
-
+        
         if (prevProps.length !== comment.length){
             setComment(defaultComment);
         }
@@ -24,17 +26,25 @@ const Comments = (props) => {
         if (reCommentRefresh) {
             commentRefresh();
             setReCommentRefresh(!reCommentRefresh);
-            setComment(defaultComment);
+            replyUpdate();
         }
-    },[reply]);
+    });
 
+    if( tempRes ) {
+        const tempResCon = Object.keys(tempRes).map((item) => reply[item]).sort((a,b) => b.timestamp - a.timestamp);
+        setComment(tempResCon);
+        setTempRes('');      
+    }
+
+    const replyUpdate = async () => {
+        const res = await loadReply(query);
+        return setTempRes(res);
+    }
 
     const showWriteReComment = (id) => {
         setWriteReReply(!writeReReply);
         setTimestampId(id);
     }
-
-    console.log(comment,  'comment')
     
     return(
         <div className="comments">
@@ -118,6 +128,7 @@ Comments.propTypes = {
     reply: PropTypes.object.isRequired,
     user: PropTypes.object,
     commentRefresh: PropTypes.func,
+    query: PropTypes.number,
 }
 
 export default Comments;
