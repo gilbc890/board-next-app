@@ -3,8 +3,7 @@ import Head from 'next/head'
 import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
 import WeeklyAside from '../../../components/WeeklyAside'
-import HumorBoard from '../../../components/HumorBoard'
-import Upload from '../../../components/Upload'
+import HumorPost from '../../../components/HumorPost'
 import { loadPost } from '../../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 import { auth } from '../../../firebase';
@@ -27,12 +26,7 @@ const Humor = (props) => {
     return <CircularProgress />
   }
   const board = Object.keys(data).map((item) => data[item])
-
   const selectedItem = board[0].find( item => item.id === id)
-
-  const firstItem = 0;
-  const lastItem = 1;
-
 
   return(
     <div className="container">
@@ -57,30 +51,24 @@ const Humor = (props) => {
     <main className="main-container">
       <WeeklyAside/>
       <div className="post-container">
-        <HumorBoard         
-          board={data}
-          query={query}
-          firstItem={firstItem}
-          lastItem={lastItem}
+        <HumorPost         
+          post={data}
+          query={parseInt(query.id)}
+          user={user}
         />
       </div>
-      {user ?
-        <Upload/>
-        :
-        <div />
-      }
     </main>
     <footer>
     </footer>
     <style jsx>{`
-      .main-container{
+      .main-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 5%;
+        padding: 10%;
       }
-      .post-container{
-        width:60%;
+      .post-container {
+        width: 65%;
       }
     `}</style>
 

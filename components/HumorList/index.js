@@ -4,11 +4,7 @@ import PropTypes from 'prop-types';
 import { CircularProgress } from '@material-ui/core';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-function HumorBoard(props) {
-    const showCheck = (item) => {
-        const currentId = parseInt(props.query.id);
-        return currentId === item;
-    }
+const HumorList = (props) => {
     const data = props.board.data;
 
     if (!data ){
@@ -34,34 +30,24 @@ function HumorBoard(props) {
                             <Link href={`/humor/:slug/:id`} as={`/humor/${boardTitle}/${item.id}`}>
                                 <div className="board-title">
                                     <h2>{item.title}</h2>
-                                    <span>icon</span>
+                                    <div className="board-user">
+                                        <img src={item.author.author_img} alt="profile"/>
+                                        <div className="board-uid">{item.author.author_uid}</div>
+                                    </div>
                                 </div>
                             </Link>
-                            {showCheck(item.id) ? 
-                            <div className="board-context">
-                                <div className="context-img">
-                                    <img src={`${item.img}`} alt="post-img"/>
-                                </div>
-                                <div className="context-text">
-                                    {item.body}
-                                </div>
-                            </div>
-                            :
-                            <div className="blank"/>
-                            }
                         </div>
                     </CSSTransition>
                     )
                     })
                 }
-
             </TransitionGroup>
         </aside>
         <style jsx>{`
-            .humor{
-                width:100%;
+            .humor {
+                width: 100%;
             }
-            .board-title{
+            .board-title {
                 background: #424242;
                 border-radius: 20px 20px 0 0;
                 padding: 1% 5%;
@@ -72,7 +58,21 @@ function HumorBoard(props) {
                 align-items: center;
                 cursor: pointer;
             }
-
+            .board-title > h2 {
+                width: 80%;
+                text-align: left;
+            }
+            .board-user {
+                width: 10%;
+                text-align: center;
+            }
+            .board-uid {
+                font-size: 1vw;
+            }
+            .board-user>img {
+                width: 60%;
+                border-radius: 50%;
+            }
             .fade-enter {
                 opacity: 0;
             }  
@@ -86,30 +86,16 @@ function HumorBoard(props) {
             .fade-exit-active {
                 transition: all 0.5s;
             }
-
-            .board-context{
-                background: #424242;
-                border-radius: 0 0 20px 20px;
-                padding: 5%;
-                color: #fff;
-                margin-bottom: 1%;
-            }
-            .context-img{
-                text-align: center;
-            }
-            .context-text{
-                padding-top: 5%;
-            }
         `}</style>
     </div>
     )
 }
 
-HumorBoard.propTypes = {
+HumorList.propTypes = {
     board: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
     firstItem: PropTypes.number.isRequired,
     lastItem: PropTypes.number.isRequired,
 }
 
-export default HumorBoard;
+export default HumorList;
