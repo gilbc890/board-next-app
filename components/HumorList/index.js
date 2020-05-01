@@ -32,7 +32,7 @@ const HumorList = (props) => {
                                     <h2>{item.title}</h2>
                                     <div className="board-user">
                                         <img src={item.author.author_img} alt="profile"/>
-                                        <div className="board-uid">{item.author.author_uid}</div>
+                                        <div className="board-uid">{item.author.author_name}</div>
                                     </div>
                                 </div>
                             </Link>

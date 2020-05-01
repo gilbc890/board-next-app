@@ -10,9 +10,9 @@ import { auth } from '../../../firebase';
 import firebase from 'firebase/app';
 
 const Humor = (props) => {
-  const id = parseInt(props.query.id);
   const data = props.data;
   const query = props.query;
+  const id = props.query.id
   const [user, setUser] = useState();
   const postNewViewCount = data.viewCount[0];
   const postViewCount = data.data[0].views;
@@ -28,11 +28,15 @@ const Humor = (props) => {
 
     // firebase function re-factor the code
     const countPost = async (postViewCount, postNewViewCount) => {
-    const postRef = await firebase.database().ref('posts/'+'board10/');
-      postRef.update({
-        "views" : postViewCount+postNewViewCount,
-      })  
-
+      if (data.id) {
+        const postRef = await firebase.database().ref('posts/'+`${data.id}/`);
+        postRef.update({
+          "views" : postViewCount+postNewViewCount,
+        })  
+      }
+      else{
+        return
+      }
   }
 
   if ( !data ) {
@@ -66,7 +70,7 @@ const Humor = (props) => {
       <div className="post-container">
         <HumorPost         
           post={data}
-          query={parseInt(query.id)}
+          query={query.id}
           user={user}
         />
       </div>
@@ -98,7 +102,7 @@ const Humor = (props) => {
 }
 
 Humor.getInitialProps = async ({query}) => {
-  const data = await loadPost(parseInt(query.id));
+  const data = await loadPost(query.id);
 
   return {
     data,

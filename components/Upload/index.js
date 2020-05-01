@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import Modal from '@material-ui/core/Modal';
 import Slide from '@material-ui/core/Slide';
+import firebase from 'firebase/app';
 
 const Upload = () => {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState();
     const [img, setImg] = useState();
     const [text, setText] = useState();
+
 
     const handleOpen = () => {
         setOpen(true);
@@ -17,9 +19,30 @@ const Upload = () => {
         setOpen(false);
     };
 
-    const savePost = () => {
-        console.log('save')
-    }  
+    // firebase function re-factor the code
+    const savePost = async () => {
+        const user = firebase.auth().currentUser;
+        const userId = firebase.auth().currentUser.uid;
+        const ref = await firebase.database().ref('posts/');
+        const key = ref.push().key;
+        const postRef = await firebase.database().ref('posts/'+key);
+
+        postRef.update({
+            "author" : {
+                author_img: user.photoURL,
+                author_name: user.displayName,
+                author_uid: userId,
+                },
+            "content": text,
+            "timestamp": new Date().getTime(),
+            "id": key,
+            "img": img,
+            "title": title,
+            "views": 1,
+        })
+        handleClose();
+        window.location.reload();
+    }
       
     return(
     <div className="upload">

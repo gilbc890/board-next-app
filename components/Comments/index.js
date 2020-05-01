@@ -79,6 +79,7 @@ const Comments = (props) => {
                         {timestampId === item.timestamp && writeReReply?
                             <div>
                                 <WriteReComment
+                                    id={query}
                                     reply_key={item.id}
                                     reCommentRefresh={() => setReCommentRefresh(!reCommentRefresh)}
                                 />
@@ -128,7 +129,7 @@ Comments.propTypes = {
     reply: PropTypes.object.isRequired,
     user: PropTypes.object,
     commentRefresh: PropTypes.func,
-    query: PropTypes.number,
+    query: PropTypes.string,
 }
 
 export default Comments;
