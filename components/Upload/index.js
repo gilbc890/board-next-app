@@ -32,11 +32,11 @@ const Upload = () => {
         if(tagData){
             await tagData.map((item)=> {
                 if(item){
-                    const tagRef = firebase.database().ref('tags/'+item);
+                    const tagRef = firebase.database().ref('tags/'+`${item}/`+key);
                     tagRef.update({
-                        key: key
+                        key
                     });
-                    postTag.push(item);
+                    setPostTag(postTag.push(item));
                 } else{
                     return;
                 }
