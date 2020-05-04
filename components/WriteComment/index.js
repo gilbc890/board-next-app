@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 
 const WriteComment = (props) => {
-    const { commentRefresh } = props;
+    const { commentRefresh, id } = props;
     const [comment, setComment] = useState();
     
     // firebase function re-factor the code
     const commentSubmit = async () => {
         const user = firebase.auth().currentUser;
         const userId = firebase.auth().currentUser.uid;
-        const ref = await firebase.database().ref('posts/'+'board10/'+'reply');
+        const ref = await firebase.database().ref('posts/'+`${id}/`+'reply');
         const key = ref.push().key;
 
-        const commentRef = await firebase.database().ref('posts/'+'board10/'+'reply/'+key);
+        const commentRef = await firebase.database().ref('posts/'+`${id}/`+'reply/'+key);
 
         commentRef.update({
             "author" : {
@@ -84,6 +84,7 @@ const WriteComment = (props) => {
 
 WriteComment.propTypes = {
     commentRefresh: PropTypes.func,
+    id: PropTypes.string,
 }
 
 export default WriteComment;

@@ -4,7 +4,7 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import firebase from 'firebase/app';
 
 const Likes = (props) => {
-    const { user } = props;
+    const { user, id } = props;
     const [countLikes, setCountLikes] = useState();
 
     useEffect(() => {
@@ -13,7 +13,8 @@ const Likes = (props) => {
 
     // firebase function re-factor the code
     const likedUser = async () => {
-        const likesRef = firebase.database().ref('posts/'+'board10/'+'likes');
+
+        const likesRef = firebase.database().ref('posts/'+`${id}/`+'likes');
         let data = [];
         await likesRef.once('value', (snapshot) => {
             data.push(snapshot.val())
@@ -37,7 +38,7 @@ const Likes = (props) => {
         const userId = firebase.auth().currentUser.uid;
         const check = await checkLikedUser();
 
-        firebase.database().ref('posts/' + 'board10/' +'likes').update({
+        firebase.database().ref('posts/' + `${id}/` +'likes').update({
             [userId]: check ? null : new Date().toISOString() 
         });
 
@@ -111,6 +112,7 @@ const Likes = (props) => {
 
 Likes.propTypes = {
     user: PropTypes.object,
+    id: PropTypes.string,
 }
 
 export default Likes;

@@ -37,7 +37,7 @@ const HumorPost = (props) => {
                     <h2>{data.title}</h2>
                     <div className="post-user">
                         <img src={data.author.author_img} alt="profile"/>
-                        <div className="post-uid">{data.author.author_uid}</div>
+                        <div className="post-uid">{data.author.author_name}</div>
                     </div>
                 </div>
                 <div className="post-context">
@@ -49,9 +49,14 @@ const HumorPost = (props) => {
                         </div>
                         <Likes
                             user={user}
+                            id={data.id}
                         />
+                        <div className="tags">
+                            {data.tags.map((item) => `#${item} `)}
+                        </div>
                         {user ?
                             <WriteComment
+                                id={data.id}
                                 commentRefresh={() => setCommentRefresh(!commentRefresh)}
                             />
                             :
@@ -112,6 +117,10 @@ const HumorPost = (props) => {
                 padding-top: 5%;
                 margin: 1% 5% 5%;
             }
+            .tags {
+                padding: 5%;
+                color: #5680e9
+            }
         `}</style>
     </div>
     )
@@ -120,7 +129,7 @@ const HumorPost = (props) => {
 HumorPost.propTypes = {
     post: PropTypes.object.isRequired,
     user: PropTypes.object,
-    query: PropTypes.number,
+    query: PropTypes.string,
 }
 
 export default HumorPost;

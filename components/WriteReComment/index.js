@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 
 const WriteReComment = (props) => {
-    const { reply_key, reCommentRefresh } = props;
+    const { reply_key, reCommentRefresh, id } = props;
     const [comment, setComment] = useState();
     
     // firebase function re-factor the code
-    const commentSubmit = async (reply_key) => {
+    const commentSubmit = async (post_id, reply_key) => {
         const user = firebase.auth().currentUser;
         const userId = firebase.auth().currentUser.uid;
-        const ref = await firebase.database().ref('posts/'+'board10/'+'reply/'+reply_key);
+        const ref = await firebase.database().ref('posts/'+`${post_id}/`+'reply/'+reply_key);
         const key = ref.push().key;
 
-        const reCommentRef = await firebase.database().ref('posts/'+'board10/'+'reply/'+`${reply_key}/`+'re_reply/'+key);
+        const reCommentRef = await firebase.database().ref('posts/'+`${post_id}/`+'reply/'+`${reply_key}/`+'re_reply/'+key);
 
         await reCommentRef.update({
             "author" : {
@@ -43,7 +43,7 @@ const WriteReComment = (props) => {
             </textarea>
             <button
                 className="comment-btn"
-                onClick={() => commentSubmit(reply_key)}
+                onClick={() => commentSubmit(id, reply_key)}
             >
                 확인
             </button>
@@ -74,6 +74,7 @@ const WriteReComment = (props) => {
 WriteReComment.propTypes = {
     reply_key: PropTypes.string.isRequired,
     reCommentRefresh: PropTypes.func,
+    id: PropTypes.string,
 }
 
 export default WriteReComment;

@@ -8,7 +8,7 @@ export const loadDB = async (id) => {
       data.push(child.val())
     })
   })
-  data = data.sort((item) => item.id);
+  data = data.sort((item) => item.timestamp);
   const dataLength = data.length;
   return { data, dataLength }
 };
@@ -23,7 +23,7 @@ export const loadPost = async (id) => {
       data.push(child.val())
     })
   })
-  data = data.sort((item) => item.id);
+  data = data.sort((item) => item.timestamp);
   const dataLength = data.length;
   return { data, dataLength, viewCount }
 };
@@ -36,7 +36,7 @@ export const loadReply = async (id) => {
       data.push(child.val())
     })
   })
-  data = data.sort((item) => item.id);
+  data = data.sort((item) => item.timestamp);
   const reply = data[0].reply
   return reply
 };
