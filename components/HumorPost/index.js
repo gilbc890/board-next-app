@@ -51,6 +51,9 @@ const HumorPost = (props) => {
                             user={user}
                             id={data.id}
                         />
+                        <div className="tags">
+                            {data.tags.map((item) => `#${item} `)}
+                        </div>
                         {user ?
                             <WriteComment
                                 id={data.id}
@@ -113,6 +116,10 @@ const HumorPost = (props) => {
             .context-text {
                 padding-top: 5%;
                 margin: 1% 5% 5%;
+            }
+            .tags {
+                padding: 5%;
+                color: #5680e9
             }
         `}</style>
     </div>

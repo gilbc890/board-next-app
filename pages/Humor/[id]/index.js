@@ -23,13 +23,13 @@ const Humor = (props) => {
         setUser(user);
       } 
     });
-    countPost(postViewCount, postNewViewCount);  
+    countPost(id, postViewCount, postNewViewCount);  
   },[]);
 
     // firebase function re-factor the code
-    const countPost = async (postViewCount, postNewViewCount) => {
-      if (data.id) {
-        const postRef = await firebase.database().ref('posts/'+`${data.id}/`);
+    const countPost = async (id, postViewCount, postNewViewCount) => {
+      if (id) {
+        const postRef = await firebase.database().ref('posts/'+`${id}/`);
         postRef.update({
           "views" : postViewCount+postNewViewCount,
         })  

@@ -7,9 +7,10 @@ import firebase from 'firebase/app';
 const Upload = () => {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState();
-    const [img, setImg] = useState();
-    const [text, setText] = useState();
-
+    const [img, setImg] = useState('');
+    const [text, setText] = useState('');
+    const [tags, setTags] = useState([]);
+    const [postTag, setPostTag] = useState([]);
 
     const handleOpen = () => {
         setOpen(true);
@@ -19,6 +20,32 @@ const Upload = () => {
         setOpen(false);
     };
 
+    const saveTags = async (key, tags) => {
+        let tagData = [];
+        tags.split(' ').map((item) => {
+            if(item.search('#')){
+                return;
+            } else{
+                tagData.push(item.replace('#', ''))
+            }
+        })
+        if(tagData){
+            await tagData.map((item)=> {
+                if(item){
+                    const tagRef = firebase.database().ref('tags/'+item);
+                    tagRef.update({
+                        key: key
+                    });
+                    postTag.push(item);
+                } else{
+                    return;
+                }
+            })    
+        } else {
+            return
+        }
+    }
+
     // firebase function re-factor the code
     const savePost = async () => {
         const user = firebase.auth().currentUser;
@@ -27,6 +54,7 @@ const Upload = () => {
         const key = ref.push().key;
         const postRef = await firebase.database().ref('posts/'+key);
 
+        saveTags(key, tags)
         postRef.update({
             "author" : {
                 author_img: user.photoURL,
@@ -39,6 +67,7 @@ const Upload = () => {
             "img": img,
             "title": title,
             "views": 1,
+            "tags": postTag,
         })
         handleClose();
         window.location.reload();
@@ -90,8 +119,17 @@ const Upload = () => {
                         placeholder="내용을 입력해주세요"
                         onChange={(e) => setText(e.currentTarget.value)}
                     />
+                    <div className="tag-write-wrap">
+                        <input 
+                            type="text" 
+                            className="tag-input"
+                            placeholder="태그를 입력해주세요"
+                            onChange={(e) => setTags(e.currentTarget.value) }
+                        />
+                    </div>
                     <button
                         className="submit-btn"
+                        disabled={!title}
                         onClick={() => savePost()}
                     >
                         등록
@@ -147,6 +185,15 @@ const Upload = () => {
                 background: #121212;
                 color: #fff;
             }
+            .tag-input-wrap {
+                width: 50%;
+            }
+            .tag-input {
+                padding: 1% 2.5%;
+                border-radius: 20px;
+                background: #121212;
+                color: #fff;
+            }
             .plus-btn {
                 overflow: hidden;
                 background: none;
@@ -167,11 +214,15 @@ const Upload = () => {
             .submit-btn {
                 border-radius: 20px;
                 padding: 1.5% 3%;
+                margin-top: 1%;
                 font-size: 1.6vw;
                 cursor: pointer;
                 background: #5680e9;
                 color: #fff;
                 border: 2px solid #fff;
+            }
+            .submit-btn:disabled {
+                cursor: not-allowed;
             }
         `}</style>
     </div>
