@@ -5,8 +5,8 @@ import Nav from '../../../components/Nav'
 import WeeklyAside from '../../../components/WeeklyAside'
 import HumorPost from '../../../components/HumorPost'
 import { loadPost } from '../../../firebase/db'
-import { auth } from '../../../firebase/auth';
 import { CircularProgress } from '@material-ui/core';
+import { auth } from '../../../firebase';
 import firebase from 'firebase/app';
 
 const Humor = (props) => {
