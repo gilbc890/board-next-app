@@ -3,14 +3,14 @@ import 'firebase/auth';
 import 'firebase/database';
 
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  databaseURL: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
-  measurementId: ""
+  apiKey: "<API_KEY>",
+  authDomain: "<AUTH_DOMAIN>",
+  databaseURL: "<DATABASE_URL>",
+  projectId: "<PROJECT_ID>",
+  storageBucket: "<STORAGE_BUCKET>",
+  messagingSenderId: "<MESSAGE_SENDER_ID>",
+  appId: "<APP_ID>",
+  measurementId: "<MEASUREMENT_ID>"
 };
 
 
