@@ -4,3 +4,4 @@ node_modules/*
 next.config.js
 
 server.js
+firebase/index.js
