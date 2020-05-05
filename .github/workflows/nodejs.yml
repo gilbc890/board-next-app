@@ -40,5 +40,4 @@ jobs:
         FIREBASE_MESUREMENT_ID: ${{ secrets.FIREBASE_MESUREMENT_ID }}
 
     - run: npm ci
-    - run: npm run build --if-present 
     - run: npm test
