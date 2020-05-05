@@ -24,13 +24,21 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-      - uses: TickX/var-to-dotenv@v1.1.1
-      with:
-        key: 'SOME_API_URI' # [Required]
-        value: ${{secrets.firebaseConfig}} # [Required]
-        default: 'https://api.alt.com' # [Optional] if `value` is empty, this is used instead
-        nullable: 'false' # [Optional] if the resolved value is empty, the variable will be omitted
-        envPath: '.env' # [Optional] The path to the dotenv file (defaults to `.env`)
-    - run: npm install
-    - run: npm run test
-    - run: npm run build
+   
+    - name: Build
+      run: |
+        npm install
+        npm run-script build
+      env:
+        FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+        FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+        FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+        FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+        FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+        FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+        FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+        FIREBASE_MESUREMENT_ID: ${{ secrets.FIREBASE_MESUREMENT_ID }}
+
+    - run: npm ci
+    - run: npm run build --if-present 
+    - run: npm test
