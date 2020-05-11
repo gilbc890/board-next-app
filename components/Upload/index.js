@@ -11,7 +11,7 @@ const Upload = () => {
     const [img, setImg] = useState('');
     const [text, setText] = useState('');
     const [tags, setTags] = useState([]);
-    const [postTag, setPostTag] = useState([]);
+    const [postTag] = useState([]);
 
     const handleOpen = () => {
         setOpen(true);
@@ -22,13 +22,11 @@ const Upload = () => {
     };
 
     const saveTags = async (key, tags) => {
+        const filteredTags = tags.match(/#\w+/g);
         let tagData = [];
-        tags.split(' ').map((item) => {
-            if(item.search('#')){
-                return;
-            } else{
-                tagData.push(item.replace('#', ''))
-            }
+        console.log(filteredTags)
+        filteredTags.map((item) => {
+            tagData.push(item.replace('#', ''))
         })
         if(tagData){
             await tagData.map((item)=> {
@@ -37,7 +35,7 @@ const Upload = () => {
                     tagRef.update({
                         key
                     });
-                    setPostTag(postTag.push(item));
+                    postTag.push(item)
                 } else{
                     return;
                 }
@@ -46,7 +44,7 @@ const Upload = () => {
             return
         }
     }
-
+    
     // firebase function re-factor the code
     const savePost = async () => {
         const user = firebase.auth().currentUser;
