@@ -10,7 +10,7 @@ const HumorList = (props) => {
     if (!data ){
         return <CircularProgress />;
     }
-    const board = Object.keys(data).map((item) => data[item])
+    const board = Object.keys(data).map((item) => data[item]);
     const firstItem = props.firstItem;
     const lastItem = props.lastItem;
 
@@ -19,7 +19,7 @@ const HumorList = (props) => {
         <aside>
             <TransitionGroup component="ul" className="post-container">
                 {board.slice(firstItem, lastItem).map((item) => {
-                const boardTitle = item.title.toLowerCase().replace(/\s+/g, "-");
+                const boardTitle = item.title.toLowerCase().replace(/[^\w\s]/gi, "-");
                     return(
                         <CSSTransition
                             timeout={500}

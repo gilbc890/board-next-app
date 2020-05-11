@@ -42,7 +42,7 @@ const HumorPost = (props) => {
                 </div>
                 <div className="post-context">
                     <div className="context-img">
-                        <img src={`${data.img}`} alt="post-img"/>
+                        <img src={`${data.img}`} className="post-img" />
                     </div>
                         <div className="context-text">
                             {data.content}
@@ -51,9 +51,13 @@ const HumorPost = (props) => {
                             user={user}
                             id={data.id}
                         />
-                        <div className="tags">
-                            {data.tags.map((item) => `#${item} `)}
-                        </div>
+                        {data.tags?
+                            <div className="tags">
+                                {data.tags.map((item) => `#${item} `)}
+                            </div>
+                        :
+                            <div/>
+                        }
                         {user ?
                             <WriteComment
                                 id={data.id}
@@ -110,8 +114,8 @@ const HumorPost = (props) => {
                 padding: 5%;
                 color: #fff;
             }
-            .context-img {
-                text-align: center;
+            .post-img {
+                width: 100%;
             }
             .context-text {
                 padding-top: 5%;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import Modal from '@material-ui/core/Modal';
 import Slide from '@material-ui/core/Slide';
+import sanitizeHtml from 'sanitize-html';
 import firebase from 'firebase/app';
 
 const Upload = () => {
@@ -10,7 +11,7 @@ const Upload = () => {
     const [img, setImg] = useState('');
     const [text, setText] = useState('');
     const [tags, setTags] = useState([]);
-    const [postTag, setPostTag] = useState([]);
+    const [postTag] = useState([]);
 
     const handleOpen = () => {
         setOpen(true);
@@ -21,13 +22,11 @@ const Upload = () => {
     };
 
     const saveTags = async (key, tags) => {
+        const filteredTags = tags.match(/#\w+/g);
         let tagData = [];
-        tags.split(' ').map((item) => {
-            if(item.search('#')){
-                return;
-            } else{
-                tagData.push(item.replace('#', ''))
-            }
+        console.log(filteredTags)
+        filteredTags.map((item) => {
+            tagData.push(item.replace('#', ''))
         })
         if(tagData){
             await tagData.map((item)=> {
@@ -36,7 +35,7 @@ const Upload = () => {
                     tagRef.update({
                         key
                     });
-                    setPostTag(postTag.push(item));
+                    postTag.push(item)
                 } else{
                     return;
                 }
@@ -45,7 +44,7 @@ const Upload = () => {
             return
         }
     }
-
+    
     // firebase function re-factor the code
     const savePost = async () => {
         const user = firebase.auth().currentUser;
@@ -99,7 +98,7 @@ const Upload = () => {
                     type="text" 
                     className="title-input"
                     placeholder="제목을 입력해주세요"
-                    onChange={(e) => setTitle(e.currentTarget.value)}
+                    onChange={(e) => setTitle(sanitizeHtml(e.currentTarget.value))}
                     />
                 </div>
                 <div className="content">
@@ -108,7 +107,7 @@ const Upload = () => {
                             type="text" 
                             className="img-input"
                             placeholder="이미지 주소를 입력해주세요"
-                            onChange={(e) => setImg(e.currentTarget.value) }
+                            onChange={(e) => setImg(sanitizeHtml(e.currentTarget.value).replace(/[`~!@#$%^&*()_|+\-=?;'",<>\\{\\}\\[\]\\]/gi, ''))}
                         />
                     </div>
                     <textarea 
@@ -117,14 +116,14 @@ const Upload = () => {
                         cols="30" 
                         rows="10"
                         placeholder="내용을 입력해주세요"
-                        onChange={(e) => setText(e.currentTarget.value)}
+                        onChange={(e) => setText(sanitizeHtml(e.currentTarget.value))}
                     />
                     <div className="tag-write-wrap">
                         <input 
                             type="text" 
                             className="tag-input"
                             placeholder="태그를 입력해주세요"
-                            onChange={(e) => setTags(e.currentTarget.value) }
+                            onChange={(e) => setTags(sanitizeHtml(e.currentTarget.value)) }
                         />
                     </div>
                     <button
@@ -139,7 +138,7 @@ const Upload = () => {
             </Slide>
         </Modal>
         <style jsx>{`
-            .upload-btn{
+            .upload-btn {
                 border-radius:50%;
                 color: #5680e9;
                 border: none;
@@ -147,6 +146,7 @@ const Upload = () => {
                 right: 5%;
                 bottom: 5%;
                 background: none;
+                cursor: pointer;
             }
             .content-wrap { 
                 width: 40%;
