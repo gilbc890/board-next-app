@@ -51,7 +51,10 @@ const Upload = () => {
         const userId = firebase.auth().currentUser.uid;
         const ref = await firebase.database().ref('posts/');
         const key = ref.push().key;
+        
         const postRef = await firebase.database().ref('posts/'+key);
+        const userRef = await firebase.database().ref('users/'+userId+'/posts/'+key);
+        const timestamp = new Date().getTime();
 
         saveTags(key, tags)
         postRef.update({
@@ -61,7 +64,21 @@ const Upload = () => {
                 author_uid: userId,
                 },
             "content": text,
-            "timestamp": new Date().getTime(),
+            "timestamp": timestamp,
+            "id": key,
+            "img": img,
+            "title": title,
+            "views": 1,
+            "tags": postTag,
+        })
+        userRef.update({
+            "author" : {
+                author_img: user.photoURL,
+                author_name: user.displayName,
+                author_uid: userId,
+                },
+            "content": text,
+            "timestamp": timestamp,
             "id": key,
             "img": img,
             "title": title,
