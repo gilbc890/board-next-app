@@ -14,7 +14,9 @@ const WriteComment = (props) => {
         const key = ref.push().key;
 
         const commentRef = await firebase.database().ref('posts/'+`${id}/`+'reply/'+key);
-
+        const userRef = await firebase.database().ref('users/'+userId+'/reply/'+key);
+        const timestamp = new Date().getTime();
+        
         commentRef.update({
             "author" : {
                 author_img: user.photoURL,
@@ -22,7 +24,18 @@ const WriteComment = (props) => {
                 author_uid: userId,
             },
             "content": comment,
-            "timestamp": new Date().getTime(),
+            "timestamp": timestamp,
+            "id": key,
+        })
+        userRef.update({
+            "author" : {
+                author_img: user.photoURL,
+                author_name: user.displayName,
+                author_uid: userId,
+            },
+            "content": comment,
+            "timestamp": timestamp,
+            "posts": id,
             "id": key,
         })
         commentRefresh();
