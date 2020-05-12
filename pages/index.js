@@ -41,10 +41,11 @@ const Home = () => {
     `}</style>
 
     <style jsx global>{`
-      body{
+      body {
         background: #121212;
         padding: 0;
         margin: 0;
+        height: 100%;
       }
     `}</style>
   </div>
