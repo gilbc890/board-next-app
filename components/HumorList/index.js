@@ -22,6 +22,7 @@ const HumorList = (props) => {
                 const boardTitle = item.title.toLowerCase().replace(/[^\w\s]/gi, "-");
                     return(
                         <CSSTransition
+                            in
                             timeout={500}
                             classNames="fade"
                             key={item.id}
