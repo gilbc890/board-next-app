@@ -83,6 +83,7 @@ const Humor = (props) => {
         justify-content: space-between;
         align-items: center;
         padding: 10%;
+        margin-top: 5%;
       }
       .post-container {
         width: 65%;
