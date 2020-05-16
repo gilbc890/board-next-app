@@ -83,6 +83,8 @@ const Nav = (props) => {
       </nav>
       <style jsx>{`
         .nav {
+          position: fixed;
+          width: 100%;
           background: #fff;
         }
         .nav-container {
@@ -102,7 +104,7 @@ const Nav = (props) => {
           outline: none;
         }
         .dropdown-content {
-          position: absolute;
+          position: fixed;
           background: #fff;
           width: 30%;
           height: 100%;
