@@ -90,11 +90,12 @@ const Humor = (props) => {
     <footer>
     </footer>
     <style jsx>{`
-      .main-container{
+      .main-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 5%;
+        margin-top: 5%;
       }
       .humor-container{
         width: 60%;
