@@ -86,6 +86,7 @@ const Nav = (props) => {
           position: fixed;
           width: 100%;
           background: #fff;
+          top: 0;
         }
         .nav-container {
           display: flex;
