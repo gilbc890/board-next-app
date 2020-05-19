@@ -13,6 +13,19 @@ export const loadDB = async (id) => {
   return { data, dataLength }
 };
 
+export const loadWeeklyDB = async () => {
+  const weeklyRef = db.ref('weekly/');
+  let data = [];
+  await weeklyRef.orderByChild('views').once('value').then((snapshot) => {
+    snapshot.forEach(function(child) {
+      data.push(child.val())
+    })
+  })
+  data = data.sort((item) => item.timestamp);
+  const dataLength = data.length;
+  return { data, dataLength }
+};
+
 export const loadPost = async (id) => {
   const postRef = db.ref('posts/');
   let data = [];

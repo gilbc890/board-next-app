@@ -5,16 +5,15 @@ import Nav from '../../components/Nav'
 import WeeklyAside from '../../components/WeeklyAside'
 import HumorList from '../../components/HumorList'
 import Upload from '../../components/Upload'
-import { loadDB } from '../../firebase/db'
-import { loadMoreDB } from '../../firebase/db'
+import { loadDB, loadMoreDB, loadWeeklyDB } from '../../firebase/db'
 import { auth } from '../../firebase';
 import { CircularProgress } from '@material-ui/core';
 
 
 const Humor = (props) => {
-  const query = props.query;
+  const { query, weeklyData } = props;
   const firstItem = 0;
-  const [lastItem, setLastItem] = useState(3);
+  const [lastItem, setLastItem] = useState(5);
   const [data, setData] = useState(props.data);
   const [total, setTotal] = useState(0);
   const [showButton, setShowButton] = useState(true);
@@ -29,8 +28,8 @@ const Humor = (props) => {
   },[]);
 
   const loadMore = async (total) => {
-    setLastItem(lastItem + 3);
-    const loadMore = await loadMoreDB(lastItem+3, total);
+    setLastItem(lastItem + 5);
+    const loadMore = await loadMoreDB(lastItem+5, total);
     setTotal(loadMore.total);
     setShowButton(loadMore.showButton)
     setData(loadMore);
@@ -61,7 +60,9 @@ const Humor = (props) => {
     </Head>
     <Nav user={user} />
     <main className="main-container">
-      <WeeklyAside/>
+      <WeeklyAside
+        weeklyData={weeklyData.data}
+      />
       <div className="humor-container">
         <HumorList 
           board={data}
@@ -124,16 +125,18 @@ const Humor = (props) => {
 }
 
 Humor.getInitialProps = async ({query}) => {
-  const data = await loadDB(3);
-
+  const data = await loadDB(5);
+  const weeklyData = await loadWeeklyDB();
   return {
     data,
+    weeklyData,
     query,
   }
 }
 
 Humor.propTypes = {
   data: PropTypes.object.isRequired,
+  weeklyData: PropTypes.object.isRequired,
   query: PropTypes.object.isRequired,
 }
 
