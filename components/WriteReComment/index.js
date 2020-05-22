@@ -3,18 +3,17 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 
 const WriteReComment = (props) => {
-    const { reply_key, reCommentRefresh, id } = props;
+    const { reCommentRefresh, id } = props;
     const [comment, setComment] = useState();
     
     // firebase function re-factor the code
-    const commentSubmit = async (post_id, reply_key) => {
+    const commentSubmit = async (post_id) => {
         const user = firebase.auth().currentUser;
         const userId = firebase.auth().currentUser.uid;
-        const ref = await firebase.database().ref('posts/'+`${post_id}/`+'reply/'+reply_key);
+        const ref = await firebase.database().ref('comments/'+`${post_id}/`);
         const key = ref.push().key;
 
-        const reCommentRef = await firebase.database().ref('posts/'+`${post_id}/`+'reply/'+`${reply_key}/`+'re_reply/'+key);
-        const userRef = await firebase.database().ref('users/'+userId+'/re_reply/'+key);
+        const reCommentRef = await firebase.database().ref('comments/'+`${post_id}/`+key);
         const timestamp = new Date().getTime();
 
         reCommentRef.update({
@@ -25,19 +24,8 @@ const WriteReComment = (props) => {
             },
             "content": comment,
             "timestamp": timestamp,
+            "depth": 1,
             "id": key,
-        })
-        userRef.update({
-            "author" : {
-                author_img: user.photoURL,
-                author_name: user.displayName,
-                author_uid: userId,
-            },
-            "content": comment,
-            "timestamp": timestamp,
-            "id": key,
-            "posts": post_id,
-            "reply": reply_key,
         })
 
         reCommentRefresh();
@@ -58,7 +46,7 @@ const WriteReComment = (props) => {
             </textarea>
             <button
                 className="comment-btn"
-                onClick={() => commentSubmit(id, reply_key)}
+                onClick={() => commentSubmit(id)}
             >
                 확인
             </button>
@@ -87,7 +75,6 @@ const WriteReComment = (props) => {
 }
 
 WriteReComment.propTypes = {
-    reply_key: PropTypes.string.isRequired,
     reCommentRefresh: PropTypes.func,
     id: PropTypes.string,
 }

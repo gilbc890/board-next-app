@@ -80,7 +80,6 @@ const Comments = (props) => {
                             <div>
                                 <WriteReComment
                                     id={query}
-                                    reply_key={item.id}
                                     reCommentRefresh={() => setReCommentRefresh(!reCommentRefresh)}
                                 />
                             </div>
