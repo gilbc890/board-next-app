@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 
 const WriteReComment = (props) => {
-    const { reCommentRefresh, id } = props;
+    const { bundle, reCommentRefresh, writeReReply, id } = props;
     const [comment, setComment] = useState();
     
     // firebase function re-factor the code
-    const commentSubmit = async (post_id) => {
+    const commentSubmit = async (post_id, bundle) => {
         const user = firebase.auth().currentUser;
         const userId = firebase.auth().currentUser.uid;
-        const ref = await firebase.database().ref('comments/'+`${post_id}/`);
+        const ref = firebase.database().ref('comments/' + `${post_id}/`);
         const key = ref.push().key;
 
-        const reCommentRef = await firebase.database().ref('comments/'+`${post_id}/`+key);
+        const reCommentRef = firebase.database().ref('comments/' + `${post_id}/` + key);
         const timestamp = new Date().getTime();
 
         reCommentRef.update({
@@ -24,11 +24,14 @@ const WriteReComment = (props) => {
             },
             "content": comment,
             "timestamp": timestamp,
+            "post_id": post_id,
+            "bundle": bundle,
             "depth": 1,
             "id": key,
         })
 
         reCommentRefresh();
+        writeReReply();
         setComment('');
     }
 
@@ -39,14 +42,14 @@ const WriteReComment = (props) => {
                 name="comment" 
                 cols="30" 
                 rows="2"
-                placeholder={'댓글의 댓글을 입력해주세요'}
+                placeholder={'대댓글을 입력해주세요'}
                 value={comment}
                 onChange={(e) => setComment(e.currentTarget.value)}
             >
             </textarea>
             <button
                 className="comment-btn"
-                onClick={() => commentSubmit(id)}
+                onClick={() => commentSubmit(id, bundle)}
             >
                 확인
             </button>
@@ -76,6 +79,8 @@ const WriteReComment = (props) => {
 
 WriteReComment.propTypes = {
     reCommentRefresh: PropTypes.func,
+    writeReReply: PropTypes.func,
+    bundle: PropTypes.number,
     id: PropTypes.string,
 }
 

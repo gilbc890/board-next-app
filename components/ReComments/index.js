@@ -2,23 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function ReComments(props) {
-    const { re_reply, re_number } = props;
-    const reComments = Object.keys(re_reply).map((item) => re_reply[item]);
+    const { reComments } = props;
 
     return(
         <div className="re-comments">
-            {reComments.slice(0, re_number).map((item) => {
-                return  (
-                    <div key={item.timestamp} className="re-comment-wrapper">
-                        <div className="re-comment-user">
-                            <img src={item.author.author_img} alt="profile"/>
-                            <div className="re-comment-uid">{item.author.author_name}</div>
-                        </div>
-                        <div>{item.content}</div>
-                    </div>
-                    )
-                })
-            }
+            <div key={reComments.timestamp} className="re-comment-wrapper">
+                <div className="re-comment-user">
+                    <img src={reComments.author.author_img} alt="profile"/>
+                    <div className="re-comment-uid">{reComments.author.author_name}</div>
+                </div>
+            <div>{reComments.content}</div>
+        </div>
         <style jsx>{`
             .re-comments {
                 width: 80%;
@@ -49,8 +43,7 @@ function ReComments(props) {
 }
 
 ReComments.propTypes = {
-    re_reply: PropTypes.object,
-    re_number: PropTypes.number,
+    reComments: PropTypes.object,
 }
 
 export default ReComments;

@@ -31,13 +31,13 @@ export const loadPost = async (id) => {
 export const loadReply = async (id) => {
   const postRef = db.ref('comments/'+`${id}`);
   let data = [];
-  await postRef.orderByChild('id').once('value').then((snapshot) => {
+  await postRef.orderByChild('bundle').once('value').then((snapshot) => {
     snapshot.forEach(function(child) {
       data.push(child.val())
     })
   })
   data = data.sort((item) => item.timestamp);
-  const reply = data
+  const reply = data;
   return reply
 };
 

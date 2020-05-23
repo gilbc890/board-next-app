@@ -115,6 +115,7 @@ Humor.getInitialProps = async ({query}) => {
 
 Humor.propTypes = {
   data: PropTypes.object.isRequired,
+  replyData: PropTypes.array,
   query: PropTypes.object.isRequired,
 }
 
