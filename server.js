@@ -28,7 +28,7 @@ app.prepare().then(() => {
     return app.render(req, res, `/error`)
   })
 
-  server.get('/humor/:slug/:id', async (req, res) => {    
+  server.get('/humor/:id/:slug', async (req, res) => {    
     return app.render(req, res, `/humor/${req.params.id}`)
   })
   
