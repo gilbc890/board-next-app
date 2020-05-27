@@ -10,10 +10,10 @@ const WriteComment = (props) => {
     const commentSubmit = async (id) => {
         const user = firebase.auth().currentUser;
         const userId = firebase.auth().currentUser.uid;
-        const ref = await firebase.database().ref('comments/'+`${id}`);
+        const ref = await firebase.database().ref('humor/comments/'+`${id}`);
         const key = ref.push().key;
 
-        const commentRef = await firebase.database().ref('comments/'+`${id}/`+key);
+        const commentRef = await firebase.database().ref('humor/comments/'+`${id}/`+key);
         const timestamp = new Date().getTime();
         
         commentRef.update({
