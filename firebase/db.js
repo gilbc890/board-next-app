@@ -31,7 +31,7 @@ export const loadPost = async (id) => {
 export const loadReply = async (id) => {
   const postRef = db.ref('humor/comments/'+`${id}`);
   let data = [];
-  await postRef.orderByChild('bundle').once('value').then((snapshot) => {
+  await postRef.orderByChild('bundle_id').once('value').then((snapshot) => {
     snapshot.forEach(function(child) {
       data.push(child.val())
     })

@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 
 const WriteReComment = (props) => {
-    const { bundle, reCommentRefresh, writeReReply, id } = props;
+    const { bundle_id, reCommentRefresh, writeReReply, id } = props;
     const [comment, setComment] = useState();
     
     // firebase function re-factor the code
-    const commentSubmit = async (post_id, bundle) => {
+    const commentSubmit = async (post_id, bundle_id) => {
         const user = firebase.auth().currentUser;
         const userId = firebase.auth().currentUser.uid;
         const ref = firebase.database().ref('humor/comments/' + `${post_id}/`);
         const key = ref.push().key;
 
         const reCommentRef = firebase.database().ref('humor/comments/' + `${post_id}/` + key);
+        const userRef = await firebase.database().ref('users/'+userId+'/humor/comments/'+key);
         const timestamp = new Date().getTime();
 
         reCommentRef.update({
@@ -25,10 +26,24 @@ const WriteReComment = (props) => {
             "content": comment,
             "timestamp": timestamp,
             "post_id": post_id,
-            "bundle": bundle,
+            "bundle_id": bundle_id,
             "depth": 1,
             "id": key,
         })
+        userRef.update({
+            "author" : {
+                author_img: user.photoURL,
+                author_name: user.displayName,
+                author_uid: userId,
+            },
+            "content": comment,
+            "timestamp": timestamp,
+            "post_id": id,
+            "depth": 0,
+            "bundle_id": timestamp,
+            "id": key,
+        })
+
 
         reCommentRefresh();
         writeReReply();
@@ -49,7 +64,7 @@ const WriteReComment = (props) => {
             </textarea>
             <button
                 className="comment-btn"
-                onClick={() => commentSubmit(id, bundle)}
+                onClick={() => commentSubmit(id, bundle_id)}
             >
                 확인
             </button>
@@ -80,7 +95,7 @@ const WriteReComment = (props) => {
 WriteReComment.propTypes = {
     reCommentRefresh: PropTypes.func,
     writeReReply: PropTypes.func,
-    bundle: PropTypes.number,
+    bundle_id: PropTypes.number,
     id: PropTypes.string,
 }
 

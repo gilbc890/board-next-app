@@ -14,6 +14,7 @@ const WriteComment = (props) => {
         const key = ref.push().key;
 
         const commentRef = await firebase.database().ref('humor/comments/'+`${id}/`+key);
+        const userRef = await firebase.database().ref('users/'+userId+'/humor/comments/'+key);
         const timestamp = new Date().getTime();
         
         commentRef.update({
@@ -26,9 +27,23 @@ const WriteComment = (props) => {
             "timestamp": timestamp,
             "post_id": id,
             "depth": 0,
-            "bundle": timestamp,
+            "bundle_id": timestamp,
             "id": key,
         })
+        userRef.update({
+            "author" : {
+                author_img: user.photoURL,
+                author_name: user.displayName,
+                author_uid: userId,
+            },
+            "content": comment,
+            "timestamp": timestamp,
+            "post_id": id,
+            "depth": 0,
+            "bundle_id": timestamp,
+            "id": key,
+        })
+
         commentRefresh();
         setComment('');
     }

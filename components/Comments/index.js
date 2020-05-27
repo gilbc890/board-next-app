@@ -8,13 +8,13 @@ import { loadReply } from '../../firebase/db'
 const Comments = (props) => {
     const { reply, user, commentRefresh, query } = props;
     const defaultComment = Object.keys(reply).map((item) => reply[item]).sort((a,b) => {
-        if(b.bundle === a.bundle) {
+        if(b.bundle_id === a.bundle_id) {
             if (b.depth === a.depth){
                 return b.timestamp - a.timestamp
             }
             return a.timestamp - b.timestamp
         }
-        return b.bundle - a.bundle
+        return b.bundle_id - a.bundle_id
     });
     const [writeReReply, setWriteReReply] = useState(false);
     const [timestampId, setTimestampId] = useState();
@@ -39,13 +39,13 @@ const Comments = (props) => {
 
     if( tempRes ) {
         const tempResCon = Object.keys(tempRes).map((item) => reply[item]).sort((a,b) => {
-            if(b.bundle === a.bundle) {
+            if(b.bundle_id === a.bundle_id) {
                 if (b.depth === a.depth){
                     return b.timestamp - a.timestamp
                 }
                 return a.timestamp - b.timestamp
             }
-            return b.bundle - a.bundle
+            return b.bundle_id - a.bundle_id
         });
         console.log('test')
         setComment(tempResCon);
@@ -101,7 +101,7 @@ const Comments = (props) => {
                             <div>
                                 <WriteReComment
                                     id={query}
-                                    bundle={item.bundle}
+                                    bundle_id={item.bundle_id}
                                     reCommentRefresh={() => setReCommentRefresh(!reCommentRefresh)}
                                     writeReReply={() => setWriteReReply(!writeReReply)}
                                 />
