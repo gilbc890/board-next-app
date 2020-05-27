@@ -22,16 +22,16 @@ const Upload = () => {
     };
 
     const saveTags = async (key, tags) => {
-        const filteredTags = tags.match(/#\w+/g);
+        const filteredTags = tags.match(/#[가-힣a-zA-Z]+/g);
         let tagData = [];
-        console.log(filteredTags)
         filteredTags.map((item) => {
             tagData.push(item.replace('#', ''))
         })
+
         if(tagData){
             await tagData.map((item)=> {
                 if(item){
-                    const tagRef = firebase.database().ref('tags/'+`${item}/`+key);
+                    const tagRef = firebase.database().ref('humor/tags/'+`${item}/`+key);
                     tagRef.update({
                         key
                     });
@@ -49,11 +49,11 @@ const Upload = () => {
     const savePost = async () => {
         const user = firebase.auth().currentUser;
         const userId = firebase.auth().currentUser.uid;
-        const ref = await firebase.database().ref('posts/');
+        const ref = await firebase.database().ref('humor/posts/');
         const key = ref.push().key;
         
-        const postRef = await firebase.database().ref('posts/'+key);
-        const userRef = await firebase.database().ref('users/'+userId+'/posts/'+key);
+        const postRef = await firebase.database().ref('humor/posts/'+key);
+        const userRef = await firebase.database().ref('users/'+userId+'/humor/posts/'+key);
         const timestamp = new Date().getTime();
 
         saveTags(key, tags)
@@ -119,11 +119,11 @@ const Upload = () => {
                     />
                 </div>
                 <div className="content">
-                    <div className="img-write-wrap">
+                    <div className="img-input-wrap">
                         <input 
                             type="text" 
                             className="img-input"
-                            placeholder="이미지 주소를 입력해주세요"
+                            placeholder="이미지 주소를 입력해주세요 eg)https://media.giphy.com/media/3o7527pa7qs9kCG78A/giphy.gif"
                             onChange={(e) => setImg(sanitizeHtml(e.currentTarget.value).replace(/[`~!@#$%^&*()_|+\-=?;'",<>\\{\\}\\[\]\\]/gi, ''))}
                         />
                     </div>
@@ -135,11 +135,11 @@ const Upload = () => {
                         placeholder="내용을 입력해주세요"
                         onChange={(e) => setText(sanitizeHtml(e.currentTarget.value))}
                     />
-                    <div className="tag-write-wrap">
+                    <div className="tag-input-wrap">
                         <input 
                             type="text" 
                             className="tag-input"
-                            placeholder="태그를 입력해주세요"
+                            placeholder="태그를 입력해주세요 eg)#태그"
                             onChange={(e) => setTags(sanitizeHtml(e.currentTarget.value)) }
                         />
                     </div>
@@ -190,7 +190,7 @@ const Upload = () => {
                 overflow: hidden;
                 text-align: center;
             }
-            .img-write-wrap {
+            .img-input-wrap {
                 display: flex;
                 justify-content: space-between;
                 width: 100%;
@@ -201,11 +201,10 @@ const Upload = () => {
                 border-radius: 20px;
                 background: #121212;
                 color: #fff;
-            }
-            .tag-input-wrap {
-                width: 50%;
+                font-size: 0.8vw;
             }
             .tag-input {
+                width: 40%;
                 padding: 1% 2.5%;
                 border-radius: 20px;
                 background: #121212;

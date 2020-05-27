@@ -7,7 +7,15 @@ import { loadReply } from '../../firebase/db'
 
 const Comments = (props) => {
     const { reply, user, commentRefresh, query } = props;
-    const defaultComment = Object.keys(reply).map((item) => reply[item]).sort((a,b) => b.timestamp - a.timestamp);
+    const defaultComment = Object.keys(reply).map((item) => reply[item]).sort((a,b) => {
+        if(b.bundle_id === a.bundle_id) {
+            if (b.depth === a.depth){
+                return b.timestamp - a.timestamp
+            }
+            return a.timestamp - b.timestamp
+        }
+        return b.bundle_id - a.bundle_id
+    });
     const [writeReReply, setWriteReReply] = useState(false);
     const [timestampId, setTimestampId] = useState();
     const [comment, setComment] = useState(defaultComment);
@@ -22,7 +30,6 @@ const Comments = (props) => {
         if (prevProps.length !== comment.length){
             setComment(defaultComment);
         }
-
         if (reCommentRefresh) {
             commentRefresh();
             setReCommentRefresh(!reCommentRefresh);
@@ -31,7 +38,16 @@ const Comments = (props) => {
     });
 
     if( tempRes ) {
-        const tempResCon = Object.keys(tempRes).map((item) => reply[item]).sort((a,b) => b.timestamp - a.timestamp);
+        const tempResCon = Object.keys(tempRes).map((item) => reply[item]).sort((a,b) => {
+            if(b.bundle_id === a.bundle_id) {
+                if (b.depth === a.depth){
+                    return b.timestamp - a.timestamp
+                }
+                return a.timestamp - b.timestamp
+            }
+            return b.bundle_id - a.bundle_id
+        });
+        console.log('test')
         setComment(tempResCon);
         setTempRes('');      
     }
@@ -51,12 +67,13 @@ const Comments = (props) => {
             {comment.slice(0, reply.length).map((item) => {
                 return  (
                     <div key={item.timestamp} className="comment">
-                        <div className="comment-wrapper">
-                            <div className="comment-user">
-                                <img src={item.author.author_img} alt="profile"/>
-                                <div className="comment-uid">{item.author.author_name}</div>
-                            </div>
-                            <div className="content">{item.content}</div>
+                        {item.depth === 0 ?
+                            <div className="comment-wrapper">
+                                <div className="comment-user">
+                                    <img src={item.author.author_img} alt="profile"/>
+                                    <div className="comment-uid">{item.author.author_name}</div>
+                                </div>
+                                <div className="content">{item.content}</div>
                             {user? 
                                 <button 
                                     className="re-reply"
@@ -68,20 +85,25 @@ const Comments = (props) => {
                                 <div/>
                             }
                         </div>
-                        {item.re_reply ?
+                        :
+                        <div/>
+                        }
+                        {item.depth === 1?
                             <ReComments 
-                                re_reply={item.re_reply} 
-                                re_number={Object.keys(item.re_reply).length}
+                                reComments={item} 
+                                re_number={Object.keys(item).length}
+                                reCommentRefresh={() => setReCommentRefresh(!reCommentRefresh)}
                             />
-                            :
+                        :
                             <div/>
                         }
                         {timestampId === item.timestamp && writeReReply?
                             <div>
                                 <WriteReComment
                                     id={query}
-                                    reply_key={item.id}
+                                    bundle_id={item.bundle_id}
                                     reCommentRefresh={() => setReCommentRefresh(!reCommentRefresh)}
+                                    writeReReply={() => setWriteReReply(!writeReReply)}
                                 />
                             </div>
                             :
@@ -126,7 +148,7 @@ const Comments = (props) => {
 }
 
 Comments.propTypes = {
-    reply: PropTypes.object.isRequired,
+    reply: PropTypes.array.isRequired,
     user: PropTypes.object,
     commentRefresh: PropTypes.func,
     query: PropTypes.string,

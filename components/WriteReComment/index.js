@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 
 const WriteReComment = (props) => {
-    const { reply_key, reCommentRefresh, id } = props;
+    const { bundle_id, reCommentRefresh, writeReReply, id } = props;
     const [comment, setComment] = useState();
     
     // firebase function re-factor the code
-    const commentSubmit = async (post_id, reply_key) => {
+    const commentSubmit = async (post_id, bundle_id) => {
         const user = firebase.auth().currentUser;
         const userId = firebase.auth().currentUser.uid;
-        const ref = await firebase.database().ref('posts/'+`${post_id}/`+'reply/'+reply_key);
+        const ref = firebase.database().ref('humor/comments/' + `${post_id}/`);
         const key = ref.push().key;
 
-        const reCommentRef = await firebase.database().ref('posts/'+`${post_id}/`+'reply/'+`${reply_key}/`+'re_reply/'+key);
-        const userRef = await firebase.database().ref('users/'+userId+'/re_reply/'+key);
+        const reCommentRef = firebase.database().ref('humor/comments/' + `${post_id}/` + key);
+        const userRef = await firebase.database().ref('users/'+userId+'/humor/comments/'+key);
         const timestamp = new Date().getTime();
 
         reCommentRef.update({
@@ -25,6 +25,9 @@ const WriteReComment = (props) => {
             },
             "content": comment,
             "timestamp": timestamp,
+            "post_id": post_id,
+            "bundle_id": bundle_id,
+            "depth": 1,
             "id": key,
         })
         userRef.update({
@@ -35,12 +38,15 @@ const WriteReComment = (props) => {
             },
             "content": comment,
             "timestamp": timestamp,
+            "post_id": id,
+            "depth": 0,
+            "bundle_id": timestamp,
             "id": key,
-            "posts": post_id,
-            "reply": reply_key,
         })
 
+
         reCommentRefresh();
+        writeReReply();
         setComment('');
     }
 
@@ -51,14 +57,14 @@ const WriteReComment = (props) => {
                 name="comment" 
                 cols="30" 
                 rows="2"
-                placeholder={'댓글의 댓글을 입력해주세요'}
+                placeholder={'대댓글을 입력해주세요'}
                 value={comment}
                 onChange={(e) => setComment(e.currentTarget.value)}
             >
             </textarea>
             <button
                 className="comment-btn"
-                onClick={() => commentSubmit(id, reply_key)}
+                onClick={() => commentSubmit(id, bundle_id)}
             >
                 확인
             </button>
@@ -87,8 +93,9 @@ const WriteReComment = (props) => {
 }
 
 WriteReComment.propTypes = {
-    reply_key: PropTypes.string.isRequired,
     reCommentRefresh: PropTypes.func,
+    writeReReply: PropTypes.func,
+    bundle_id: PropTypes.number,
     id: PropTypes.string,
 }
 

@@ -19,7 +19,7 @@ const HumorList = (props) => {
         <aside>
             <TransitionGroup component="ul" className="post-container">
                 {board.slice(firstItem, lastItem).map((item) => {
-                const boardTitle = item.title.toLowerCase().replace(/[^\w\s]/gi, "-");
+                const boardTitle = item.title.toLowerCase().replace(/[^가-힣a-zA-Z0-9]/gi, "-");
                     return(
                         <CSSTransition
                             in

@@ -8,10 +8,11 @@ import { CircularProgress } from '@material-ui/core';
 
 const HumorPost = (props) => {
     const data = props.post.data[0];
-    const { user, query } = props;
+    const { user, query, reply } = props;
 
+    
     const [commentRefresh, setCommentRefresh] = useState(false);
-    const [replyData, setReplyData] = useState(data.reply);
+    const [replyData, setReplyData] = useState(reply);
 
     useEffect(() => {
         if (commentRefresh) {
@@ -24,6 +25,7 @@ const HumorPost = (props) => {
         const res = await loadReply(query);
         return setReplyData(res);
     }
+
       
     if (!data ){
         return <CircularProgress />;
@@ -133,6 +135,7 @@ const HumorPost = (props) => {
 HumorPost.propTypes = {
     post: PropTypes.object.isRequired,
     user: PropTypes.object,
+    reply: PropTypes.array,
     query: PropTypes.string,
 }
 
