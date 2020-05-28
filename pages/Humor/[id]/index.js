@@ -4,15 +4,14 @@ import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
 import WeeklyAside from '../../../components/WeeklyAside'
 import HumorPost from '../../../components/HumorPost'
-import { loadPost, loadWeeklyDB } from '../../../firebase/db'
+import { loadPost, loadReply, loadWeeklyDB } from '../../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 import { auth } from '../../../firebase';
 import firebase from 'firebase/app';
 
 const Humor = (props) => {
-  const { data, weeklyData } = props; 
-  const query = props.query;
-  const id = props.query.id
+  const { data, query, replyData, weeklyData } = props;
+  const id = query.id
   const [user, setUser] = useState();
   const postNewViewCount = data.viewCount[0];
   const postViewCount = data.data[0].views;
@@ -76,6 +75,7 @@ const Humor = (props) => {
       <div className="post-container">
         <HumorPost         
           post={data}
+          reply={replyData}
           query={query.id}
           user={user}
         />
@@ -111,17 +111,20 @@ const Humor = (props) => {
 Humor.getInitialProps = async ({query}) => {
   const data = await loadPost(query.id);
   const weeklyData = await loadWeeklyDB();
+  const replyData = await loadReply(query.id);
 
   return {
     data,
     weeklyData,
     query,
+    replyData
   }
 }
 
 Humor.propTypes = {
   data: PropTypes.object.isRequired,
   weeklyData: PropTypes.object.isRequired,
+  replyData: PropTypes.array,
   query: PropTypes.object.isRequired,
 }
 

@@ -14,7 +14,7 @@ const Likes = (props) => {
     // firebase function re-factor the code
     const likedUser = async () => {
 
-        const likesRef = firebase.database().ref('posts/'+`${id}/`+'likes');
+        const likesRef = firebase.database().ref('humor/likes/'+`${id}/`);
         let data = [];
         await likesRef.once('value', (snapshot) => {
             data.push(snapshot.val())
@@ -34,11 +34,10 @@ const Likes = (props) => {
     }
 
     const likes = async () => {
-        // var postKey = firebase.database().ref().child('posts/').push().key;
         const userId = firebase.auth().currentUser.uid;
         const check = await checkLikedUser();
 
-        firebase.database().ref('posts/' + `${id}/` +'likes').update({
+        firebase.database().ref('humor/likes/' + `${id}/`).update({
             [userId]: check ? null : new Date().toISOString() 
         });
 

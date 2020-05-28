@@ -7,14 +7,14 @@ const WriteComment = (props) => {
     const [comment, setComment] = useState();
     
     // firebase function re-factor the code
-    const commentSubmit = async () => {
+    const commentSubmit = async (id) => {
         const user = firebase.auth().currentUser;
         const userId = firebase.auth().currentUser.uid;
-        const ref = await firebase.database().ref('posts/'+`${id}/`+'reply');
+        const ref = await firebase.database().ref('humor/comments/'+`${id}`);
         const key = ref.push().key;
 
-        const commentRef = await firebase.database().ref('posts/'+`${id}/`+'reply/'+key);
-        const userRef = await firebase.database().ref('users/'+userId+'/reply/'+key);
+        const commentRef = await firebase.database().ref('humor/comments/'+`${id}/`+key);
+        const userRef = await firebase.database().ref('users/'+userId+'/humor/comments/'+key);
         const timestamp = new Date().getTime();
         
         commentRef.update({
@@ -25,6 +25,9 @@ const WriteComment = (props) => {
             },
             "content": comment,
             "timestamp": timestamp,
+            "post_id": id,
+            "depth": 0,
+            "bundle_id": timestamp,
             "id": key,
         })
         userRef.update({
@@ -35,9 +38,12 @@ const WriteComment = (props) => {
             },
             "content": comment,
             "timestamp": timestamp,
-            "posts": id,
+            "post_id": id,
+            "depth": 0,
+            "bundle_id": timestamp,
             "id": key,
         })
+
         commentRefresh();
         setComment('');
     }
@@ -57,7 +63,7 @@ const WriteComment = (props) => {
             {comment ?
                 <button
                     className="comment-btn"
-                    onClick={() => commentSubmit()}
+                    onClick={() => commentSubmit(id)}
                 >
                     확인
                 </button>

@@ -17,10 +17,10 @@ const WeeklyAside = (props) => {
             </div>
             <div>
                 {weeklyBoard.slice(0, weeklyDataLength).map((item) => {
-                    const boardTitle = item.title.toLowerCase().replace(/[^\w\s]/gi, "-");
+                    const boardTitle = item.title.toLowerCase().replace(/[^가-힣a-zA-Z0-9]/gi, "-");
                     return(
                         <div key={item.id} className="weekly-board">
-                            <Link href={`/humor/:slug/:id`} as={`/humor/${boardTitle}/${item.id}`}>
+                            <Link href={`/humor/:id/:slug`} as={`/humor/${item.id}/${boardTitle}`}>
                                 <div className="weekly-board-title">
                                     <h2>{item.title}</h2>
                                 </div>
