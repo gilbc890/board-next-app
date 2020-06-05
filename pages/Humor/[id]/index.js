@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
 import WeeklyAside from '../../../components/WeeklyAside'
 import HumorPost from '../../../components/HumorPost'
-import { loadPost, loadReply } from '../../../firebase/db'
+import { loadPost, loadReply, loadWeeklyDB } from '../../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 import { auth } from '../../../firebase';
 import firebase from 'firebase/app';
 
 const Humor = (props) => {
-  const { data, query, replyData } = props;
+  const { data, query, replyData, weeklyData } = props;
   const id = query.id
   const [user, setUser] = useState();
   const postNewViewCount = data.viewCount[0];
@@ -29,7 +29,11 @@ const Humor = (props) => {
     const countPost = async (id, postViewCount, postNewViewCount) => {
       if (id) {
         const postRef = await firebase.database().ref('posts/'+`${id}/`);
+        const weeklyRef = await firebase.database().ref('weekly/'+`${id}/`);
         postRef.update({
+          "views" : postViewCount+postNewViewCount,
+        })
+        weeklyRef.update({
           "views" : postViewCount+postNewViewCount,
         })  
       }
@@ -65,7 +69,9 @@ const Humor = (props) => {
     </Head>
     <Nav user={user} />
     <main className="main-container">
-      <WeeklyAside/>
+      <WeeklyAside
+        weeklyData={weeklyData.data}
+      />
       <div className="post-container">
         <HumorPost         
           post={data}
@@ -104,10 +110,12 @@ const Humor = (props) => {
 
 Humor.getInitialProps = async ({query}) => {
   const data = await loadPost(query.id);
+  const weeklyData = await loadWeeklyDB();
   const replyData = await loadReply(query.id);
 
   return {
     data,
+    weeklyData,
     query,
     replyData
   }
@@ -115,6 +123,7 @@ Humor.getInitialProps = async ({query}) => {
 
 Humor.propTypes = {
   data: PropTypes.object.isRequired,
+  weeklyData: PropTypes.object.isRequired,
   replyData: PropTypes.array,
   query: PropTypes.object.isRequired,
 }

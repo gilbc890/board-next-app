@@ -33,16 +33,10 @@ const Nav = (props) => {
                 <div className="dropdown-content">
                   <ul>
                     <li>
-                      <a href="/humor">유머 커뮤니티</a>
+                      <a href="/humor">유머</a>
                     </li>
                     <li>
-                      <a href="/humor">유머 커뮤니티</a>
-                    </li>
-                    <li>
-                    <a href="/humor">유머 커뮤니티</a>
-                    </li>
-                    <li>
-                      <a href="/humor">유머 커뮤니티</a>
+                      <a href="/product">마켓</a>
                     </li>
                   </ul>
                 </div>

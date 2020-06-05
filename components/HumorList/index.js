@@ -57,6 +57,7 @@ const HumorList = (props) => {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                font-size: 1.3vw;
                 cursor: pointer;
             }
             .board-title > h2 {
@@ -68,7 +69,7 @@ const HumorList = (props) => {
                 text-align: center;
             }
             .board-uid {
-                font-size: 1vw;
+                font-size: 0.9vw;
             }
             .board-user>img {
                 width: 60%;

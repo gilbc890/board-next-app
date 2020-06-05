@@ -22,7 +22,7 @@ const Upload = () => {
     };
 
     const saveTags = async (key, tags) => {
-        const filteredTags = tags.match(/#[가-힣a-zA-Z]+/g);
+        const filteredTags = tags.match(/#[가-힣a-zA-Z0-9]+/g);
         let tagData = [];
         filteredTags.map((item) => {
             tagData.push(item.replace('#', ''))
@@ -54,6 +54,7 @@ const Upload = () => {
         
         const postRef = await firebase.database().ref('humor/posts/'+key);
         const userRef = await firebase.database().ref('users/'+userId+'/humor/posts/'+key);
+        const weeklyRef = await firebase.database().ref('humor/weekly/'+key);
         const timestamp = new Date().getTime();
 
         saveTags(key, tags)
@@ -85,6 +86,20 @@ const Upload = () => {
             "views": 1,
             "tags": postTag,
         })
+        weeklyRef.update({
+            "author" : {
+                author_img: user.photoURL,
+                author_name: user.displayName,
+                author_uid: userId,
+                },
+            "content": text,
+            "timestamp": timestamp,
+            "id": key,
+            "img": img,
+            "title": title,
+            "views": 1,
+            "tags": postTag,
+        })        
         handleClose();
         window.location.reload();
     }
