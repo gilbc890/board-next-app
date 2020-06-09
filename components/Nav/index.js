@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import MenuIcon from '@material-ui/icons/Menu';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -33,10 +34,18 @@ const Nav = (props) => {
                 <div className="dropdown-content">
                   <ul>
                     <li>
-                      <a href="/humor">유머</a>
+                      <Link href="/humor">
+                        <a>
+                          유머
+                        </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="/product">마켓</a>
+                      <Link href="/products">
+                        <a>
+                          마켓
+                        </a> 
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -47,9 +56,11 @@ const Nav = (props) => {
           </ClickAwayListener>
         </div>
         <div className="logo-container">
-          <a href="/" className="logo">
-            <img src="/logo.png" className="logo-img" alt="logo" />
-          </a>
+            <Link href="/">
+              <a className="logo">
+                <img src="/logo.png" className="logo-img" alt="logo" />
+              </a>
+            </Link>
         </div>
         {user ? 
           <button
@@ -94,6 +105,7 @@ const Nav = (props) => {
           border: none;
           color: #5680e9;
           cursor: pointer;
+          background: none;
         }
         .bar-menu:focus {
           outline: none;

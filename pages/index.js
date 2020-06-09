@@ -52,11 +52,4 @@ const Home = () => {
 )
 }
 
-Home.getInitialProps = async () => {
-
-  return {
-  }
-}
-
-
 export default Home
