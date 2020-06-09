@@ -41,7 +41,7 @@ const Nav = (props) => {
                       </Link>
                     </li>
                     <li>
-                      <Link href="/product">
+                      <Link href="/products">
                         <a>
                           마켓
                         </a> 
