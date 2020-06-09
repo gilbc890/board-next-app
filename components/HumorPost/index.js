@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Comments from '../Comments';
 import Likes from '../Likes';
 import WriteComment from '../WriteComment';
-import { loadReply } from '../../firebase/db'
+import { loadHumorReply } from '../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 
 const HumorPost = (props) => {
@@ -22,7 +22,7 @@ const HumorPost = (props) => {
     });
 
     const replyUpdate = async () => {
-        const res = await loadReply(query);
+        const res = await loadHumorReply(query);
         return setReplyData(res);
     }
 

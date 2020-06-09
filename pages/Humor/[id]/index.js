@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
 import WeeklyAside from '../../../components/WeeklyAside'
 import HumorPost from '../../../components/HumorPost'
-import { loadPost, loadReply, loadWeeklyDB } from '../../../firebase/db'
+import { loadHumorPost, loadHumorReply, loadWeeklyHumorDB } from '../../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 import { auth } from '../../../firebase';
 import firebase from 'firebase/app';
@@ -109,9 +109,9 @@ const Humor = (props) => {
 }
 
 Humor.getInitialProps = async ({query}) => {
-  const data = await loadPost(query.id);
-  const weeklyData = await loadWeeklyDB();
-  const replyData = await loadReply(query.id);
+  const data = await loadHumorPost(query.id);
+  const weeklyData = await loadWeeklyHumorDB();
+  const replyData = await loadHumorReply(query.id);
 
   return {
     data,

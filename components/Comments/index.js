@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReComments from '../ReComments';
 import WriteReComment from '../WriteReComment';
 import ReplyIcon from '@material-ui/icons/Reply';
-import { loadReply } from '../../firebase/db'
+import { loadHumorReply } from '../../firebase/db'
 
 const Comments = (props) => {
     const { reply, user, commentRefresh, query } = props;
@@ -53,7 +53,7 @@ const Comments = (props) => {
     }
 
     const replyUpdate = async () => {
-        const res = await loadReply(query);
+        const res = await loadHumorReply(query);
         return setTempRes(res);
     }
 

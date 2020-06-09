@@ -5,7 +5,7 @@ import Nav from '../../components/Nav'
 import WeeklyAside from '../../components/WeeklyAside'
 import HumorList from '../../components/HumorList'
 import Upload from '../../components/Upload'
-import { loadDB, loadMoreDB, loadWeeklyDB } from '../../firebase/db'
+import { loadHumorDB, loadMoreHumorDB, loadWeeklyHumorDB } from '../../firebase/db'
 import { auth } from '../../firebase';
 import { CircularProgress } from '@material-ui/core';
 
@@ -29,7 +29,7 @@ const Humor = (props) => {
 
   const loadMore = async (total) => {
     setLastItem(lastItem + 5);
-    const loadMore = await loadMoreDB(lastItem+5, total);
+    const loadMore = await loadMoreHumorDB(lastItem+5, total);
     setTotal(loadMore.total);
     setShowButton(loadMore.showButton)
     setData(loadMore);
@@ -125,8 +125,8 @@ const Humor = (props) => {
 }
 
 Humor.getInitialProps = async ({query}) => {
-  const data = await loadDB(5);
-  const weeklyData = await loadWeeklyDB();
+  const data = await loadHumorDB(5);
+  const weeklyData = await loadWeeklyHumorDB();
   return {
     data,
     weeklyData,
