@@ -20,7 +20,6 @@ const Products = (props) => {
         });  
     },[]);
 
-
     if ( !data ) {
         return <CircularProgress />
     }
@@ -75,7 +74,7 @@ const Products = (props) => {
 }
 
 Products.getInitialProps = async () => {
-  const data = await loadProductDB(5);
+  const data = await loadProductDB(6);
   return {
     data,
   }
