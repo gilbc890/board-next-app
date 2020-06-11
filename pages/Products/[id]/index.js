@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import PropTypes from 'prop-types';
-import Nav from '../../components/Nav'
-import ProductList from '../../components/ProductList'
-import { loadProductDB } from '../../firebase/db'
-import { auth } from '../../firebase';
+import Nav from '../../../components/Nav'
+import ProductItem from '../../../components/ProductItem'
+import { loadProductItem, loadProductReply } from '../../../firebase/db'
+import { auth } from '../../../firebase';
 import { CircularProgress } from '@material-ui/core';
 
 
 const Products = (props) => {
-    const { data } = props;
+    const { data, query, replyData } = props;
     const [user, setUser] = useState();
 
     useEffect(() => {
@@ -45,8 +45,11 @@ const Products = (props) => {
         </Head>
         <Nav user={user} />
         <main className="main-container">
-            <ProductList 
+            <ProductItem 
                 product={data}
+                reply={replyData}
+                query={query.id}
+                user={user}
             />
         </main>
         <footer>
@@ -73,15 +76,21 @@ const Products = (props) => {
     )
 }
 
-Products.getInitialProps = async () => {
-  const data = await loadProductDB(6);
+Products.getInitialProps = async ({query}) => {
+  const data = await loadProductItem(query.id);
+  const replyData = await loadProductReply(query.id);
+
   return {
     data,
+    query,
+    replyData
   }
 }
 
 Products.propTypes = {
   data: PropTypes.object.isRequired,
+  replyData: PropTypes.array,
+  query: PropTypes.object.isRequired,
 }
 
 

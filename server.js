@@ -16,7 +16,7 @@ app.prepare().then(() => {
   server.get('/b', (req, res) => {
     return app.render(req, res, '/b', req.query)
   })
-
+// humor url
   server.get('/humor/:id', (req, res) => {
     if(!req.params.slug){
         return app.render(req, res, `/error`)
@@ -30,6 +30,21 @@ app.prepare().then(() => {
 
   server.get('/humor/:id/:slug', async (req, res) => {    
     return app.render(req, res, `/humor/${req.params.id}`)
+  })
+// products url
+  server.get('/products/:id', (req, res) => {
+    if(!req.params.slug){
+        return app.render(req, res, `/error`)
+    } else {
+        return app.render(req, res, `/products/${req.params.id}`)
+    }
+  })
+  server.get('/products/:slug', (req, res) => {
+    return app.render(req, res, `/error`)
+  })
+
+  server.get('/products/:id/:slug', async (req, res) => {    
+    return app.render(req, res, `/products/${req.params.id}`)
   })
   
   server.all('*', (req, res) => {

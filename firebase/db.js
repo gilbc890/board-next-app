@@ -103,3 +103,30 @@ export const loadProductDB = async (id) => {
   data = data.sort((item) => item.timestamp);
   return { data }
 };
+export const loadProductItem = async (id) => {
+  const postRef = db.ref('products/item/');
+  let data = [];
+  let viewCount = [];
+  await postRef.orderByChild('id').equalTo(id).once('value').then((snapshot) => {
+    viewCount.push(snapshot.numChildren());
+    snapshot.forEach(function(child) {
+      data.push(child.val())
+    })
+  })
+  data = data.sort((item) => item.timestamp);
+  const dataLength = data.length;
+  return { data, dataLength, viewCount }
+};
+
+export const loadProductReply = async (id) => {
+  const postRef = db.ref('products/comments/'+`${id}`);
+  let data = [];
+  await postRef.orderByChild('bundle_id').once('value').then((snapshot) => {
+    snapshot.forEach(function(child) {
+      data.push(child.val())
+    })
+  })
+  data = data.sort((item) => item.timestamp);
+  const reply = data;
+  return reply
+};
