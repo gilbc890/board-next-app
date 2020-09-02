@@ -6,8 +6,8 @@ import WriteComment from '../WriteComment';
 import { loadHumorReply } from '../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 
-const HumorPost = (props) => {
-    const data = props.post.data[0];
+const ProductItem = (props) => {
+    const data = props.product.data[0];
     const { user, query, reply } = props;
 
     
@@ -26,76 +26,92 @@ const HumorPost = (props) => {
         return setReplyData(res);
     }
 
-      
+    const priceWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     if (!data ){
         return <CircularProgress />;
     }
+
     
     return(
-        <div className="humor">
+        <div className="product">
         <aside className="post-container">
             <div>
-                <div className="post-title">
+                <div className="item-title">
                     <h2>{data.title}</h2>
                     <div className="post-user">
                         <img src={data.author.author_img} alt="profile"/>
                         <div className="post-uid">{data.author.author_name}</div>
                     </div>
                 </div>
-                <div className="post-context">
-                    <div className="context-img">
-                        <img src={`${data.img}`} className="post-img" />
-                    </div>
-                        <div className="context-text">
-                            {data.content}
-                        </div>
-                        <Likes
-                            user={user}
-                            id={data.id}
-                        />
-                        {data.tags?
-                            <div className="tags">
-                                {data.tags.map((item) => `#${item} `)}
+                <div className="item-context">
+                    <div className="item-details">
+                        <div className="img-wrap">
+                            <div className="context-img">
+                                <img src={`${data.img}`} className="item-img" />
                             </div>
+                        </div>
+                        <div className="content-wrap">
+                            <div className="item-title">
+                                <h2>{data.title}</h2>
+                            </div>
+                            <div className="product-price">
+                                {priceWithCommas(data.price)} 원
+                            </div>
+                        </div>
+                    </div>
+                    <div className="context-text">
+                        {data.content}
+                    </div>
+                    <Likes
+                        user={user}
+                        id={data.id}
+                    />
+                    {data.tags?
+                        <div className="tags">
+                            {data.tags.map((item) => `#${item} `)}
+                        </div>
+                    :
+                        <div/>
+                    }
+                    {user ?
+                        <WriteComment
+                            id={data.id}
+                            commentRefresh={() => setCommentRefresh(!commentRefresh)}
+                        />
                         :
-                            <div/>
-                        }
-                        {user ?
-                            <WriteComment
-                                id={data.id}
-                                commentRefresh={() => setCommentRefresh(!commentRefresh)}
-                            />
-                            :
-                            <div/>
-                        }
-                        {replyData  ?
-                            <Comments 
-                                reply={replyData} 
-                                user={user}
-                                commentRefresh={() => setCommentRefresh(!commentRefresh)}
-                                query={query}
-                            />                        
-                            :
-                            <div/>
-                        }
+                        <div/>
+                    }
+                    {replyData  ?
+                        <Comments 
+                            reply={replyData} 
+                            user={user}
+                            commentRefresh={() => setCommentRefresh(!commentRefresh)}
+                            query={query}
+                        />                        
+                        :
+                        <div/>
+                    }
                     </div>
             </div>
         </aside>
         <style jsx>{`
-            .humor {
+            .product {
                 width: 100%;
             }
-            .post-title {
+            .item-title {
                 background: #424242;
                 border-radius: 20px 20px 0 0;
                 padding: 1% 5%;
+                margin-top: 5%;
                 color: #fff;
-                margin-bottom: 0.5%;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-            .post-title > h2 {
+            .item-title > h2 {
                 width: 80%;
                 text-align: left;
             }
@@ -110,14 +126,24 @@ const HumorPost = (props) => {
                 width: 60%;
                 border-radius: 50%;
             }
-            .post-context {
+            .product-price {
+
+            }
+            .item-context {
                 background: #424242;
                 border-radius: 0 0 20px 20px;
                 padding: 5%;
                 color: #fff;
             }
-            .post-img {
+            .item-details {
+                display: flex;
+            }
+            .content-wrap {
+                margin: auto;
+            }
+            .item-img {
                 width: 100%;
+                border-radius: 20px;
             }
             .context-text {
                 padding-top: 5%;
@@ -132,11 +158,11 @@ const HumorPost = (props) => {
     )
 }
 
-HumorPost.propTypes = {
-    post: PropTypes.object.isRequired,
+ProductItem.propTypes = {
+    product: PropTypes.object.isRequired,
     user: PropTypes.object,
     reply: PropTypes.array,
     query: PropTypes.string,
 }
 
-export default HumorPost;
+export default ProductItem;
