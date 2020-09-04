@@ -13,10 +13,10 @@ export const loadHumorDB = async (id) => {
   return { data, dataLength }
 };
 
-export const loadWeeklyHumorDB = async () => {
-  const weeklyRef = db.ref('humor/weekly/');
+export const loadClicksHumorDB = async () => {
+  const clciksRef = db.ref('humor/weekly/');
   let data = [];
-  await weeklyRef.orderByChild('views').once('value').then((snapshot) => {
+  await clciksRef.orderByChild('views').once('value').then((snapshot) => {
     snapshot.forEach(function(child) {
       data.push(child.val())
     })
@@ -130,3 +130,33 @@ export const loadProductReply = async (id) => {
   const reply = data;
   return reply
 };
+
+export const countPost = async (id, postViewCount, postNewViewCount) => {
+  if (id) {
+    const postRef = await db.ref('humor/posts/'+`${id}/`);
+    const clickRef = await db.ref('humor/weekly/'+`${id}/`);
+    postRef.update({
+      "views" : postViewCount+postNewViewCount,
+    })
+    clickRef.update({
+      "views" : postViewCount+postNewViewCount,
+    })  
+  }
+  else{
+    return
+  }
+}
+export const likedUserDB =  async (id) => {
+  const likesRef = db.ref('humor/likes/'+`${id}/`);
+  let data = [];
+  await likesRef.once('value', (snapshot) => {
+      data.push(snapshot.val())
+  });
+  console.log(data[0], 'data')
+  return data[0]
+}
+export const likesDB =  async (userId, id, check) => {
+  db.ref('humor/likes/' + `${id}/`).update({
+    [userId]: check ? null : new Date().toISOString() 
+});
+}

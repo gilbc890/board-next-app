@@ -19,7 +19,7 @@ const HumorPost = (props) => {
             setCommentRefresh(!commentRefresh);
             replyUpdate();
         }
-    });
+    }, []);
 
     const replyUpdate = async () => {
         const res = await loadHumorReply(query);

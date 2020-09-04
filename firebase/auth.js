@@ -28,6 +28,11 @@ export const getUserById = async (userId) => {
   return user;
 };
 
+export const getUid = () => {
+  const userId = firebase.auth().currentUser.uid;
+  return userId;
+}
+
 
 export const signOut = async () => {
   firebase.auth().signOut().then(window.location.reload());

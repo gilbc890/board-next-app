@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import PropTypes from 'prop-types';
 import Nav from '../../components/Nav'
-import WeeklyAside from '../../components/WeeklyAside'
+import ClicksAside from '../../components/ClicksAside'
 import HumorList from '../../components/HumorList'
 import Upload from '../../components/Upload'
-import { loadHumorDB, loadMoreHumorDB, loadWeeklyHumorDB } from '../../firebase/db'
+import { loadHumorDB, loadMoreHumorDB, loadClicksHumorDB } from '../../firebase/db'
 import { auth } from '../../firebase';
 import { CircularProgress } from '@material-ui/core';
 
 
 const Humor = (props) => {
-  const { query, weeklyData } = props;
+  const { query, clicksData } = props;
   const firstItem = 0;
   const [lastItem, setLastItem] = useState(5);
   const [data, setData] = useState(props.data);
@@ -60,8 +60,8 @@ const Humor = (props) => {
     </Head>
     <Nav user={user} />
     <main className="main-container">
-      <WeeklyAside
-        weeklyData={weeklyData.data}
+      <ClicksAside
+        clicksData={clicksData.data}
       />
       <div className="humor-container">
         <HumorList 
@@ -126,17 +126,17 @@ const Humor = (props) => {
 
 Humor.getInitialProps = async ({query}) => {
   const data = await loadHumorDB(5);
-  const weeklyData = await loadWeeklyHumorDB();
+  const clicksData = await loadClicksHumorDB();
   return {
     data,
-    weeklyData,
+    clicksData,
     query,
   }
 }
 
 Humor.propTypes = {
   data: PropTypes.object.isRequired,
-  weeklyData: PropTypes.object.isRequired,
+  clicksData: PropTypes.object.isRequired,
   query: PropTypes.object.isRequired,
 }
 
