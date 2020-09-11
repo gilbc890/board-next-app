@@ -1,4 +1,4 @@
-import { db } from './';
+import { db, auth } from './';
 
 export const loadHumorDB = async (id) => {
   const postRef = db.ref('humor/posts/');
@@ -146,17 +146,96 @@ export const countPost = async (id, postViewCount, postNewViewCount) => {
     return
   }
 }
+
 export const likedUserDB =  async (id) => {
   const likesRef = db.ref('humor/likes/'+`${id}/`);
   let data = [];
   await likesRef.once('value', (snapshot) => {
       data.push(snapshot.val())
   });
-  console.log(data[0], 'data')
+
   return data[0]
 }
+
 export const likesDB =  async (userId, id, check) => {
   db.ref('humor/likes/' + `${id}/`).update({
     [userId]: check ? null : new Date().toISOString() 
 });
 }
+
+export const commentSave = async (id, comment) => {
+  const user = auth.currentUser;
+  const userId = auth.currentUser.uid;
+  const ref = await db.ref('humor/comments/'+`${id}`);
+  const key = ref.push().key;
+
+  const commentRef = await db.ref(`humor/comments/${id}/${key}`);
+  const userRef = await db.ref(`users/${userId}/humor/comments/${key}`);
+  const timestamp = new Date().getTime();
+  
+  commentRef.update({
+      "author" : {
+          author_img: user.photoURL,
+          author_name: user.displayName,
+          author_uid: userId,
+      },
+      "content": comment,
+      "timestamp": timestamp,
+      "post_id": id,
+      "depth": 0,
+      "bundle_id": timestamp,
+      "id": key,
+  })
+  userRef.update({
+      "author" : {
+          author_img: user.photoURL,
+          author_name: user.displayName,
+          author_uid: userId,
+      },
+      "content": comment,
+      "timestamp": timestamp,
+      "post_id": id,
+      "depth": 0,
+      "bundle_id": timestamp,
+      "id": key,
+  })
+}
+
+export const reCommentSave = async (post_id, bundle_id, comment) => {
+  const user = auth.currentUser;
+  const userId = auth.currentUser.uid;
+  const ref = db.ref(`humor/comments/${post_id}/`);
+  const key = ref.push().key;
+
+  const reCommentRef = db.ref(`humor/comments/${post_id}/${key}`);
+  const userRef = await db.ref(`users/${userId}/humor/comments/${key}`);
+  const timestamp = new Date().getTime();
+
+  reCommentRef.update({
+      "author" : {
+          author_img: user.photoURL,
+          author_name: user.displayName,
+          author_uid: userId,
+      },
+      "content": comment,
+      "timestamp": timestamp,
+      "post_id": post_id,
+      "bundle_id": bundle_id,
+      "depth": 1,
+      "id": key,
+  })
+  userRef.update({
+      "author" : {
+          author_img: user.photoURL,
+          author_name: user.displayName,
+          author_uid: userId,
+      },
+      "content": comment,
+      "timestamp": timestamp,
+      "post_id": post_id,
+      "depth": 1,
+      "bundle_id": bundle_id,
+      "id": key,
+  })
+}
+

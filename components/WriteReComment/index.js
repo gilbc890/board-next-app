@@ -1,50 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import firebase from 'firebase/app';
+import { reCommentSave } from '../../firebase/db';
 
 const WriteReComment = (props) => {
     const { bundle_id, reCommentRefresh, writeReReply, id } = props;
     const [comment, setComment] = useState();
     
-    // firebase function re-factor the code
-    const commentSubmit = async (post_id, bundle_id) => {
-        const user = firebase.auth().currentUser;
-        const userId = firebase.auth().currentUser.uid;
-        const ref = firebase.database().ref('humor/comments/' + `${post_id}/`);
-        const key = ref.push().key;
-
-        const reCommentRef = firebase.database().ref('humor/comments/' + `${post_id}/` + key);
-        const userRef = await firebase.database().ref('users/'+userId+'/humor/comments/'+key);
-        const timestamp = new Date().getTime();
-
-        reCommentRef.update({
-            "author" : {
-                author_img: user.photoURL,
-                author_name: user.displayName,
-                author_uid: userId,
-            },
-            "content": comment,
-            "timestamp": timestamp,
-            "post_id": post_id,
-            "bundle_id": bundle_id,
-            "depth": 1,
-            "id": key,
-        })
-        userRef.update({
-            "author" : {
-                author_img: user.photoURL,
-                author_name: user.displayName,
-                author_uid: userId,
-            },
-            "content": comment,
-            "timestamp": timestamp,
-            "post_id": id,
-            "depth": 0,
-            "bundle_id": timestamp,
-            "id": key,
-        })
-
-
+    const commentSubmit = async (post_id, bundle_id, comment) => {
+        reCommentSave(post_id, bundle_id, comment)
         reCommentRefresh();
         writeReReply();
         setComment('');
@@ -64,7 +27,7 @@ const WriteReComment = (props) => {
             </textarea>
             <button
                 className="comment-btn"
-                onClick={() => commentSubmit(id, bundle_id)}
+                onClick={() => commentSubmit(id, bundle_id, comment)}
             >
                 확인
             </button>

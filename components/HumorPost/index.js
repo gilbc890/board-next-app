@@ -10,7 +10,6 @@ const HumorPost = (props) => {
     const data = props.post.data[0];
     const { user, query, reply } = props;
 
-    
     const [commentRefresh, setCommentRefresh] = useState(false);
     const [replyData, setReplyData] = useState(reply);
 
@@ -19,14 +18,14 @@ const HumorPost = (props) => {
             setCommentRefresh(!commentRefresh);
             replyUpdate();
         }
-    }, []);
+    }, [commentRefresh]);
+
 
     const replyUpdate = async () => {
         const res = await loadHumorReply(query);
         return setReplyData(res);
     }
 
-      
     if (!data ){
         return <CircularProgress />;
     }

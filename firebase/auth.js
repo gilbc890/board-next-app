@@ -1,8 +1,8 @@
-import firebase from 'firebase/app';
+import { db, auth } from './';
 
 export const authWithFacebook = async () => {
-  const provider = new firebase.auth.FacebookAuthProvider();
-  const result = await firebase.auth().signInWithPopup(provider);
+  const provider = new auth.FacebookAuthProvider();
+  const result = await auth.signInWithPopup(provider);
   await signInWithProvider(result);
 };
 
@@ -11,7 +11,7 @@ const signInWithProvider = async (result) => {
   const userExists = await getUserById(user.uid);
   
   if(!userExists) {
-    const ref = await firebase.database().ref('users/'+user.uid);
+    const ref = await db.ref('users/'+user.uid);
 
     ref.update({
         "timestamp": new Date().getTime(),
@@ -24,16 +24,16 @@ const signInWithProvider = async (result) => {
 };
 
 export const getUserById = async (userId) => {
-  const user = await firebase.database().ref(`users/${userId}`).once('value').then((snapshot) => snapshot.val());
+  const user = await db.ref(`users/${userId}`).once('value').then((snapshot) => snapshot.val());
   return user;
 };
 
 export const getUid = () => {
-  const userId = firebase.auth().currentUser.uid;
+  const userId = auth.currentUser.uid;
   return userId;
 }
 
 
 export const signOut = async () => {
-  firebase.auth().signOut().then(window.location.reload());
+  auth.signOut().then(window.location.reload());
 };
