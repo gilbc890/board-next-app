@@ -1,4 +1,5 @@
 node_modules/*
+.eslintrc.js
 
 # _app.js
 next.config.js
