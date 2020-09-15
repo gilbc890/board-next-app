@@ -8,7 +8,8 @@ export const loadHumorDB = async (id) => {
       data.push(child.val())
     })
   })
-  data = data.sort((item) => item.timestamp);
+  data = data.sort((a,b) => b.timestamp - a.timestamp);
+
   const dataLength = data.length;
   return { data, dataLength }
 };

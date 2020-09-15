@@ -127,6 +127,7 @@ const Humor = (props) => {
 Humor.getInitialProps = async ({query}) => {
   const data = await loadHumorDB(5);
   const clicksData = await loadClicksHumorDB();
+
   return {
     data,
     clicksData,
