@@ -4,24 +4,24 @@ import Link from 'next/link'
 import PropTypes from 'prop-types';
 
 
-const WeeklyAside = (props) => {
-    const { weeklyData } = props;
-    const weeklyBoard = Object.keys(weeklyData).map((item) => weeklyData[item]);
-    const weeklyDataLength = weeklyData.length >= 5 ? 5 : weeklyData.length;
+const ClicksAside = (props) => {
+    const { clicksData } = props;
+    const clicksBoard = Object.keys(clicksData).map((item) => clicksData[item]);
+    const clcicksDataLength = clicksData.length >= 5 ? 5 : clicksData.length;
 
     return(
-    <div className="weekly">
+    <div className="click">
         <aside>
-            <div className="weekly-board-wrap">
-                <h2>주간 조회수</h2>
+            <div className="click-board-wrap">
+                <h2>베스트 조회수</h2>
             </div>
             <div>
-                {weeklyBoard.slice(0, weeklyDataLength).map((item) => {
+                {clicksBoard.slice(0, clcicksDataLength).map((item) => {
                     const boardTitle = item.title.toLowerCase().replace(/[^가-힣a-zA-Z0-9]/gi, "-");
                     return(
-                        <div key={item.id} className="weekly-board">
+                        <div key={item.id} className="click-board">
                             <Link href={`/humor/:id/:slug`} as={`/humor/${item.id}/${boardTitle}`}>
-                                <div className="weekly-board-title">
+                                <div className="click-board-title">
                                     <h2>{item.title}</h2>
                                 </div>
                             </Link>
@@ -31,26 +31,26 @@ const WeeklyAside = (props) => {
             </div>
         </aside>
         <style jsx>{`
-            .weekly {
+            .click {
                 width:30%;
             }
-            .weekly-board-wrap {
+            .click-board-wrap {
                 background: #424242;
                 border-radius: 20px 20px 0 0;
                 padding: 1% 10%;
                 color:#fff;
                 font-size: 1.5vw;
             }
-            .weekly-board {
+            .click-board {
                 background: #424242;
                 padding: 1% 10%;
                 color: #fff;
                 cursor: pointer;
             }
-            .weekly-board:last-child {
+            .click-board:last-child {
                 border-radius: 0 0 20px 20px;
             }
-            .weekly-board-title {
+            .click-board-title {
                 font-size: 1vw;
             }
         `}</style>
@@ -58,8 +58,8 @@ const WeeklyAside = (props) => {
 )
 }
 
-WeeklyAside.propTypes = {
-    weeklyData: PropTypes.array.isRequired,
+ClicksAside.propTypes = {
+    clicksData: PropTypes.array.isRequired,
 }
 
-export default WeeklyAside;
+export default ClicksAside;

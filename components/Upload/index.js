@@ -54,7 +54,7 @@ const Upload = () => {
         
         const postRef = await firebase.database().ref('humor/posts/'+key);
         const userRef = await firebase.database().ref('users/'+userId+'/humor/posts/'+key);
-        const weeklyRef = await firebase.database().ref('humor/weekly/'+key);
+        const clickRef = await firebase.database().ref('humor/weekly/'+key);
         const timestamp = new Date().getTime();
 
         saveTags(key, tags)
@@ -86,7 +86,7 @@ const Upload = () => {
             "views": 1,
             "tags": postTag,
         })
-        weeklyRef.update({
+        clickRef.update({
             "author" : {
                 author_img: user.photoURL,
                 author_name: user.displayName,

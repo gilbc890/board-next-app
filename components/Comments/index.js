@@ -35,7 +35,7 @@ const Comments = (props) => {
             setReCommentRefresh(!reCommentRefresh);
             replyUpdate();
         }
-    });
+    }, [commentRefresh, reCommentRefresh]);
 
     if( tempRes ) {
         const tempResCon = Object.keys(tempRes).map((item) => reply[item]).sort((a,b) => {
@@ -47,7 +47,7 @@ const Comments = (props) => {
             }
             return b.bundle_id - a.bundle_id
         });
-        console.log('test')
+
         setComment(tempResCon);
         setTempRes('');      
     }
