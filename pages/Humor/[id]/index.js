@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import PropTypes from 'prop-types';
 import Nav from '../../../components/Nav'
-import WeeklyAside from '../../../components/WeeklyAside'
+import ClicksAside from '../../../components/ClicksAside'
 import HumorPost from '../../../components/HumorPost'
-import { loadHumorPost, loadHumorReply, loadWeeklyHumorDB } from '../../../firebase/db'
+import { loadHumorPost, loadHumorReply, loadClicksHumorDB, countPost } from '../../../firebase/db'
 import { CircularProgress } from '@material-ui/core';
 import { auth } from '../../../firebase';
-import firebase from 'firebase/app';
 
 const Humor = (props) => {
-  const { data, query, replyData, weeklyData } = props;
+  const { data, query, replyData, clicksData } = props;
   const id = query.id
   const [user, setUser] = useState();
   const postNewViewCount = data.viewCount[0];
@@ -24,23 +23,6 @@ const Humor = (props) => {
     });
     countPost(id, postViewCount, postNewViewCount);  
   },[]);
-
-    // firebase function re-factor the code
-    const countPost = async (id, postViewCount, postNewViewCount) => {
-      if (id) {
-        const postRef = await firebase.database().ref('posts/'+`${id}/`);
-        const weeklyRef = await firebase.database().ref('weekly/'+`${id}/`);
-        postRef.update({
-          "views" : postViewCount+postNewViewCount,
-        })
-        weeklyRef.update({
-          "views" : postViewCount+postNewViewCount,
-        })  
-      }
-      else{
-        return
-      }
-  }
 
   if ( !data ) {
     return <CircularProgress />
@@ -69,8 +51,8 @@ const Humor = (props) => {
     </Head>
     <Nav user={user} />
     <main className="main-container">
-      <WeeklyAside
-        weeklyData={weeklyData.data}
+      <ClicksAside
+        clicksData={clicksData.data}
       />
       <div className="post-container">
         <HumorPost         
@@ -110,12 +92,12 @@ const Humor = (props) => {
 
 Humor.getInitialProps = async ({query}) => {
   const data = await loadHumorPost(query.id);
-  const weeklyData = await loadWeeklyHumorDB();
+  const clicksData = await loadClicksHumorDB();
   const replyData = await loadHumorReply(query.id);
 
   return {
     data,
-    weeklyData,
+    clicksData,
     query,
     replyData
   }
@@ -123,7 +105,7 @@ Humor.getInitialProps = async ({query}) => {
 
 Humor.propTypes = {
   data: PropTypes.object.isRequired,
-  weeklyData: PropTypes.object.isRequired,
+  clicksData: PropTypes.object.isRequired,
   replyData: PropTypes.array,
   query: PropTypes.object.isRequired,
 }
