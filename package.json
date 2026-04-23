@@ -22,7 +22,7 @@
     "react": "^17.0.0-rc.1",
     "react-dom": "16.13.1",
     "react-transition-group": "^4.3.0",
-    "sanitize-html": "^1.23.0"
+    "sanitize-html": "^2.3.2"
   },
   "devDependencies": {
     "eslint": "^7.9.0",
