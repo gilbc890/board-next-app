@@ -1,47 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import firebase from 'firebase/app';
+import { likedUserDB, likesDB } from '../../firebase/db';
+import { getUid } from '../../firebase/auth';
+
 
 const Likes = (props) => {
     const { user, id } = props;
-    const [countLikes, setCountLikes] = useState();
+    const [countLikes, setCountLikes] = useState(0);
 
     useEffect(() => {
-        likedUser()
+        likedUser(id)
     });
 
-    // firebase function re-factor the code
-    const likedUser = async () => {
+    const likedUser = async (id) => {
+        const users = Object.keys(await likedUserDB(id) || 0);
 
-        const likesRef = firebase.database().ref('humor/likes/'+`${id}/`);
-        let data = [];
-        await likesRef.once('value', (snapshot) => {
-            data.push(snapshot.val())
-        });
-
-        const users = Object.keys(data[0] || 0);
-        setCountLikes(users.length);
-        
+        setCountLikes(users.length);        
         return users
     }
 
-    const checkLikedUser = async () => {
-        const userId = firebase.auth().currentUser.uid;
-        const likedUserResult = await likedUser();
+    const checkLikedUser = async (id) => {
+        const userId = getUid();
+        const likedUserResult = await likedUser(id);
 
         return likedUserResult.includes(userId)
     }
 
-    const likes = async () => {
-        const userId = firebase.auth().currentUser.uid;
-        const check = await checkLikedUser();
+    const likes = async (id) => {
+        const userId = getUid();
+        const check = await checkLikedUser(id);
 
-        firebase.database().ref('humor/likes/' + `${id}/`).update({
-            [userId]: check ? null : new Date().toISOString() 
-        });
+        likesDB(userId, id, check);
 
-        if(checkLikedUser()){
+        if(checkLikedUser(id)){
             if(countLikes === 0){
                 setCountLikes(0)
             } else {
@@ -57,7 +49,7 @@ const Likes = (props) => {
             {user?
                 <button
                     className="like-btn"
-                    onClick={() => likes()}
+                    onClick={() => likes(id)}
                 >
                     <ThumbUpIcon />
                     {countLikes
